@@ -40,10 +40,6 @@ branch_node {
                         total_population: 1524
                       }
                       pools {
-                        population_offset: 12000000000
-                        total_population: 1524
-                      }
-                      pools {
                         population_offset: 13000000000
                         total_population: 2032
                       }
