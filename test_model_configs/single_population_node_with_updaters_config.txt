@@ -1,0 +1,732 @@
+index: 0
+name: "root"
+branch_node {
+  branches {
+    condition {
+      name: "cookie vs. cookieless. name field is optional."
+      op: EQUAL
+      value: "cookied"
+    }
+    node {
+        name: "cookied"
+        index: 2
+        branch_node {
+          branches {
+            condition {
+              name: "pool"
+              op: EQUAL
+              value: "cookied_pool"
+            }
+            node {
+              name: "cookied_pool"
+              index: 0
+                branch_node {
+                  branches {
+                    condition {
+                      name: "country"
+                      op: EQUAL
+                      value: "GB"
+                    }
+                    node {
+                      name: "cookied_pool-GB"
+                      index: 0
+                      branch_node {
+                        branches {
+                          condition {
+                            name: "acting_user_space"
+                            op: EQUAL
+                            value: "phone"
+                          }
+                          node {
+                            name: "cookied_pool-GB-phone"
+                            index: 0
+                            branch_node {
+                              branches {
+                                condition {
+                                  op: AND
+                                   sub_filters {
+                                    name: "min_age"
+                                    op: GT
+                                    value: "18"
+                                  }
+                                   sub_filters {
+                                    name: "max_age"
+                                    op: LT
+                                    value: "phone"
+                                  }
+                                   sub_filters {
+                                    name: "gender"
+                                    op: EQUAL
+                                    value: "2"
+                                  }
+                                }
+                                node {
+                                  name: "cookied_pool-GB-phone-Demo Bucket - F18-24"
+                                  index: 0
+                                  branch_node {
+                                    branches {
+                                      chance: 0.1930248
+                                      node{
+                                        population_node {
+                                          pools {
+                                            population_offset: 11000000000
+                                            total_population: 30478
+                                          }
+                                        }
+
+                                      }
+                                    }
+                                    branches {
+                                      chance: 0.5157664
+                                      node {
+                                        population_node {
+                                          pools {
+                                            population_offset: 11000030478
+                                            total_population: 81437
+                                          }
+                                        }
+                                      }
+                                    }
+                                    branches {
+                                      chance: 0.24120784999999997
+                                      node {
+                                        population_node {
+                                          pools {
+                                            population_offset: 11000111915
+                                            total_population: 38085
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+            }
+          }
+          updates {
+            updates{
+              conditional_merge {
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "phone_user_info.demo.gender"
+                         op: EQUAL
+                         value: "2"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "18"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "24"
+                      }
+                   }
+                   update {
+                      device_user_type: "phone"
+                      corrected_demo {
+                         gender: 2
+                         age {
+                          min_age: 18
+                          max_age: 24
+                         }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "phone_user_info.demo.gender"
+                         op: EQUAL
+                         value: "2"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "25"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "34"
+                      }
+                   }
+                   update {
+                      device_user_type: "phone"
+                      corrected_demo {
+                        gender: 2
+                        age {
+                          min_age: 25
+                          max_age: 34
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "phone_user_info.demo.gender"
+                         op: EQUAL
+                         value: "2"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "35"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "99"
+                      }
+                   }
+                   update {
+                      device_user_type: "phone"
+                      corrected_demo {
+                        gender: 2
+                        age {
+                          min_age: 35
+                          max_age: 99
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "phone_user_info.demo.gender"
+                         op: EQUAL
+                         value: "1"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "18"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "24"
+                      }
+                   }
+                   update {
+                      device_user_type: "phone"
+                      corrected_demo {
+                        gender: 1
+                        age {
+                          min_age: 18
+                          max_age: 24
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "phone_user_info.demo.gender"
+                         op: EQUAL
+                         value: "1"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "25"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "34"
+                      }
+                   }
+                   update {
+                      device_user_type: "phone"
+                      corrected_demo {
+                        gender: 1
+                        age {
+                          min_age: 25
+                          max_age: 34
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "phone_user_info.demo.gender"
+                         op: EQUAL
+                         value: "1"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "35"
+                      }
+                      sub_filters {
+                         name: "phone_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "99"
+                      }
+                   }
+                   update {
+                      device_user_type: "phone"
+                      corrected_demo {
+                        gender: 1
+                        age {
+                          min_age: 35
+                          max_age: 99
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "email_user_info.demo.gender"
+                         op: EQUAL
+                         value: "2"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "18"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "24"
+                      }
+                   }
+                   update {
+                      device_user_type: "email"
+                      corrected_demo {
+                        gender: 2
+                        age {
+                          min_age: 18
+                          max_age: 24
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "email_user_info.demo.gender"
+                         op: EQUAL
+                         value: "2"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "25"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "34"
+                      }
+                   }
+                   update {
+                      device_user_type: "email"
+                      corrected_demo {
+                        gender: 2
+                        age {
+                          min_age: 25
+                          max_age: 34
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "email_user_info.demo.gender"
+                         op: EQUAL
+                         value: "2"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "35"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "99"
+                      }
+                   }
+                   update {
+                      device_user_type: "email"
+                      corrected_demo {
+                        gender: 2
+                        age {
+                          min_age: 35
+                          max_age: 99
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "email_user_info.demo.gender"
+                         op: EQUAL
+                         value: "1"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "18"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "24"
+                      }
+                   }
+                   update {
+                      device_user_type: "email"
+                      corrected_demo {
+                        gender: 1
+                        age {
+                          min_age: 18
+                          max_age: 24
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "email_user_info.demo.gender"
+                         op: EQUAL
+                         value: "1"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "25"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "34"
+                      }
+                   }
+                   update {
+                      device_user_type: "email"
+                      corrected_demo {
+                        gender: 1
+                        age {
+                          min_age: 25
+                          max_age: 34
+                        }
+                      }
+                   }
+                }
+                nodes {
+                   condition {
+                      op: AND
+                      sub_filters {
+                         name: "email_user_info.demo.gender"
+                         op: EQUAL
+                         value: "1"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_from"
+                         op: EQUAL
+                         value: "35"
+                      }
+                      sub_filters {
+                         name: "email_user_info.demo.age_to"
+                         op: EQUAL
+                         value: "99"
+                      }
+                   }
+                   update {
+                      device_user_type: "email"
+                      corrected_demo {
+                        gender: 1
+                        age {
+                          min_age: 35
+                          max_age: 99
+                        }
+                      }
+                   }
+                }
+              }
+            }
+            updates{
+              update_matrix {
+              columns {
+                 person_country_code: "GB"
+                 acting_demo {
+                    gender: 2
+                    age {
+                      min_age: 18
+                      max_age: 24
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "GB"
+                 acting_demo {
+                    gender: 2
+                    age {
+                      min_age: 25
+                      max_age: 34
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "GB"
+                 acting_demo {
+                    gender: 2
+                    age {
+                      min_age: 35
+                      max_age: 99
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "GB"
+                 acting_demo {
+                    gender: 1
+                    age {
+                      min_age: 18
+                      max_age: 24
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "GB"
+                 acting_demo {
+                    gender: 1
+                    age {
+                      min_age: 25
+                      max_age: 34
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "GB"
+                 acting_demo {
+                    gender: 1
+                    age {
+                      min_age: 35
+                      max_age: 99
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "US"
+                 acting_demo {
+                    gender: 2
+                    age {
+                      min_age: 18
+                      max_age: 24
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "US"
+                 acting_demo {
+                    gender: 2
+                    age {
+                      min_age: 25
+                      max_age: 34
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "US"
+                 acting_demo {
+                    gender: 2
+                    age {
+                      min_age: 35
+                      max_age: 99
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "US"
+                 acting_demo {
+                    gender: 1
+                    age {
+                      min_age: 18
+                      max_age: 24
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "US"
+                 acting_demo {
+                    gender: 1
+                    age {
+                      min_age: 25
+                      max_age: 34
+                    }
+                 }
+              }
+              columns {
+                 person_country_code: "US"
+                 acting_demo {
+                    gender: 1
+                    age {
+                      min_age: 35
+                      max_age: 99
+                    }
+                 }
+              }
+              rows {
+                 corrected_demo {
+                    gender: 2
+                    age {
+                      min_age: 18
+                      max_age: 24
+                    }
+                 }
+              }
+              rows {
+                 corrected_demo {
+                    gender: 2
+                    age {
+                      min_age: 25
+                      max_age: 34
+                    }
+                 }
+              }
+              rows {
+                 corrected_demo {
+                    gender: 2
+                    age {
+                      min_age: 35
+                      max_age: 99
+                    }
+                 }
+              }
+              rows {
+                 corrected_demo {
+                    gender: 1
+                    age {
+                      min_age: 18
+                      max_age: 24
+                    }
+                 }
+              }
+              rows {
+                 corrected_demo {
+                    gender: 1
+                    age {
+                      min_age: 25
+                      max_age: 34
+                    }
+                 }
+              }
+              rows {
+                 corrected_demo {
+                    gender: 1
+                    age {
+                      min_age: 35
+                      max_age: 99
+                    }
+                 }
+              }
+              probabilities: 0.5
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.55
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.05
+              probabilities: 0.05
+              probabilities: 0.1
+              probabilities: 0.6
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.05
+              probabilities: 0.0
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.65
+              probabilities: 0.1
+              probabilities: 0.05
+              probabilities: 0.05
+              probabilities: 0.05
+              probabilities: 0.05
+              probabilities: 0.1
+              probabilities: 0.7
+              probabilities: 0.05
+              probabilities: 0.0
+              probabilities: 0.0
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.05
+              probabilities: 0.75
+              probabilities: 0.5
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.55
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.05
+              probabilities: 0.05
+              probabilities: 0.1
+              probabilities: 0.6
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.05
+              probabilities: 0.0
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.65
+              probabilities: 0.1
+              probabilities: 0.05
+              probabilities: 0.05
+              probabilities: 0.05
+              probabilities: 0.05
+              probabilities: 0.1
+              probabilities: 0.7
+              probabilities: 0.05
+              probabilities: 0.0
+              probabilities: 0.0
+              probabilities: 0.1
+              probabilities: 0.1
+              probabilities: 0.05
+              probabilities: 0.75
+              }
+            } 
+          }
+        }
+      }
+  }
+}
