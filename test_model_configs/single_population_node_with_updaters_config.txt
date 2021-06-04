@@ -50,6 +50,7 @@ branch_node {
                                 node {
                                   name: "cookied_pool-GB-phone-Demo Bucket - F18-24"
                                   branch_node {
+                                     random_seed: "branch_node_random_seed"
                                     branches {
                                       chance: 0.1930248
                                       node{
@@ -463,6 +464,7 @@ branch_node {
             }
             updates{
               update_matrix {
+               random_seed: "updater_matrix_random_seed"
               columns {
                  person_country_code: "GB"
                  acting_demo {
