@@ -150,7 +150,7 @@ branch_node {
                       }
                    }
                    update {
-                      device_user_type: "phone"
+                      acting_demo_id_space: "phone"
                       acting_demo {
                         gender: 2
                         age {
@@ -180,7 +180,7 @@ branch_node {
                       }
                    }
                    update {
-                      device_user_type: "phone"
+                      acting_demo_id_space: "phone"
                       acting_demo {
                         gender: 2
                         age {
@@ -210,7 +210,7 @@ branch_node {
                       }
                    }
                    update {
-                      device_user_type: "phone"
+                      acting_demo_id_space: "phone"
                       acting_demo {
                         gender: 1
                         age {
@@ -240,7 +240,7 @@ branch_node {
                       }
                    }
                    update {
-                      device_user_type: "phone"
+                      acting_demo_id_space: "phone"
                       acting_demo {
                         gender: 1
                         age {
@@ -270,7 +270,7 @@ branch_node {
                       }
                    }
                    update {
-                      device_user_type: "phone"
+                      acting_demo_id_space: "phone"
                       acting_demo {
                         gender: 1
                         age {
@@ -284,23 +284,23 @@ branch_node {
                    condition {
                       op: AND
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.gender"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.gender"
                          op: EQUAL
                          value: "2"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_from"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.min_age"
                          op: EQUAL
                          value: "18"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_to"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.max_age"
                          op: EQUAL
                          value: "24"
                       }
                    }
                    update {
-                      device_user_type: "email"
+                      acting_demo_id_space: "email"
                       acting_demo {
                         gender: 2
                         age {
@@ -314,23 +314,23 @@ branch_node {
                    condition {
                       op: AND
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.gender"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.gender"
                          op: EQUAL
                          value: "2"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_from"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.min_age"
                          op: EQUAL
                          value: "25"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_to"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.max_age"
                          op: EQUAL
                          value: "34"
                       }
                    }
                    update {
-                      device_user_type: "email"
+                      acting_demo_id_space: "email"
                       acting_demo {
                         gender: 2
                         age {
@@ -344,23 +344,23 @@ branch_node {
                    condition {
                       op: AND
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.gender"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.gender"
                          op: EQUAL
                          value: "2"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_from"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.min_age"
                          op: EQUAL
                          value: "35"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_to"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.max_age"
                          op: EQUAL
                          value: "99"
                       }
                    }
                    update {
-                      device_user_type: "email"
+                      acting_demo_id_space: "email"
                       acting_demo {
                         gender: 2
                         age {
@@ -374,23 +374,23 @@ branch_node {
                    condition {
                       op: AND
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.gender"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.gender"
                          op: EQUAL
                          value: "1"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_from"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.min_age"
                          op: EQUAL
                          value: "18"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_to"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.max_age"
                          op: EQUAL
                          value: "24"
                       }
                    }
                    update {
-                      device_user_type: "email"
+                      acting_demo_id_space: "email"
                       acting_demo {
                         gender: 1
                         age {
@@ -404,23 +404,23 @@ branch_node {
                    condition {
                       op: AND
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.gender"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.gender"
                          op: EQUAL
                          value: "1"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_from"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.min_age"
                          op: EQUAL
                          value: "25"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_to"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.max_age"
                          op: EQUAL
                          value: "34"
                       }
                    }
                    update {
-                      device_user_type: "email"
+                      acting_demo_id_space: "email"
                       acting_demo {
                         gender: 1
                         age {
@@ -434,23 +434,23 @@ branch_node {
                    condition {
                       op: AND
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.gender"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.gender"
                          op: EQUAL
                          value: "1"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_from"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.min_age"
                          op: EQUAL
                          value: "35"
                       }
                       sub_filters {
-                         name: "labeler_input.profile_info.email_user_info.demo.age_to"
+                         name: "labeler_input.profile_info.email_user_info.demo.demo_bucket.age.max_age"
                          op: EQUAL
                          value: "99"
                       }
                    }
                    update {
-                      device_user_type: "email"
+                      acting_demo_id_space: "email"
                       acting_demo {
                         gender: 1
                         age {
@@ -712,7 +712,7 @@ branch_node {
               probabilities: 0.05
               probabilities: 0.75
               }
-            } 
+            }
           }
         }
       }
