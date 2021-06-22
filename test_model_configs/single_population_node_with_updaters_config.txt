@@ -100,6 +100,7 @@ branch_node {
           updates {
             updates{
               conditional_merge {
+                pass_through_non_matches: True
                 nodes {
                    condition {
                       op: AND
@@ -711,6 +712,7 @@ branch_node {
               probabilities: 0.1
               probabilities: 0.05
               probabilities: 0.75
+              pass_through_non_matches: True
               }
             }
           }
