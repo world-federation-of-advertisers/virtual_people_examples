@@ -2138,5 +2138,221 @@ branch_node {
           }
         }
       }
-  }
+   }
+   branches {
+      condition {
+         op: TRUE
+      }
+      node {
+         name: "cookieless_pool"
+         branch_node {
+            branches {
+               condition {
+                  op: TRUE
+               }
+               node {
+                  name: "cookieless_pool-GB"
+                  branch_node {
+                    branches {
+                      chance: 0.014334152295311998
+                      node{
+                        population_node {
+                          pools {
+                            population_offset: 11000000000
+                            total_population: 1524
+                          }
+                          pools {
+                            population_offset: 12000000000
+                            total_population: 1524
+                          }
+                          pools {
+                            population_offset: 13000000000
+                            total_population: 2032
+                          }
+                          pools {
+                            population_offset: 14000000000
+                            total_population: 2032
+                          }
+                          pools {
+                            population_offset: 15000000000
+                            total_population: 1016
+                          }
+                          pools {
+                            population_offset: 16000000000
+                            total_population: 1016
+                          }
+                        }
+                      }
+                    }
+                    branches {
+                      chance: 0.29819144627135996
+                      node {
+                        population_node {
+                          pools {
+                            population_offset: 11000001524
+                            total_population: 4072
+                          }
+                          pools {
+                            population_offset: 12000001524
+                            total_population: 4072
+                          }
+                          pools {
+                            population_offset: 13000002032
+                            total_population: 5429
+                          }
+                          pools {
+                            population_offset: 14000002032
+                            total_population: 5429
+                          }
+                          pools {
+                            population_offset: 15000001016
+                            total_population: 2714
+                          }
+                          pools {
+                            population_offset: 16000001016
+                            total_population: 2714
+                          }
+                        }
+                      }
+                    }
+                    branches {
+                      chance: 0.587474034240015
+                      node {
+                        population_node {
+                          pools {
+                            population_offset: 11000005596
+                            total_population: 1904
+                          }
+                          pools {
+                            population_offset: 12000005596
+                            total_population: 1904
+                          }
+                          pools {
+                            population_offset: 13000007461
+                            total_population: 2539
+                          }
+                          pools {
+                            population_offset: 14000007461
+                            total_population: 2539
+                          }
+                          pools {
+                            population_offset: 15000003730
+                            total_population: 1270
+                          }
+                          pools {
+                            population_offset: 16000003730
+                            total_population: 1270
+                          }
+                        }
+                      }
+                    }
+                  }
+               }
+            }
+            branches {
+               condition {
+                  op: TRUE
+               }
+               node {
+                  name: "cookieless_pool-US"
+                  branch_node {
+                    branches {
+                      chance: 0.014334152295311998
+                      node{
+                        population_node {
+                          pools {
+                            population_offset: 1000000000
+                            total_population: 102
+                          }
+                          pools {
+                            population_offset: 2000000000
+                            total_population: 203
+                          }
+                          pools {
+                            population_offset: 3000000000
+                            total_population: 305
+                          }
+                          pools {
+                            population_offset: 4000000000
+                            total_population: 406
+                          }
+                          pools {
+                            population_offset: 5000000000
+                            total_population: 508
+                          }
+                          pools {
+                            population_offset: 6000000000
+                            total_population: 610
+                          }
+                        }
+                      }
+                    }
+                    branches {
+                      chance: 0.29819144627135996
+                      node {
+                        population_node {
+                          pools {
+                            population_offset: 1000000102
+                            total_population: 271
+                          }
+                          pools {
+                            population_offset: 2000000203
+                            total_population: 543
+                          }
+                          pools {
+                            population_offset: 3000000305
+                            total_population: 814
+                          }
+                          pools {
+                            population_offset: 4000000406
+                            total_population: 1086
+                          }
+                          pools {
+                            population_offset: 5000000508
+                            total_population: 1357
+                          }
+                          pools {
+                            population_offset: 6000000610
+                            total_population: 1628
+                          }
+                        }
+                      }
+                    }
+                    branches {
+                      chance: 0.587474034240015
+                      node {
+                        population_node {
+                          pools {
+                            population_offset: 1000000373
+                            total_population: 127
+                          }
+                          pools {
+                            population_offset: 2000000746
+                            total_population: 254
+                          }
+                          pools {
+                            population_offset: 3000001119
+                            total_population: 381
+                          }
+                          pools {
+                            population_offset: 4000001492
+                            total_population: 508
+                          }
+                          pools {
+                            population_offset: 5000001865
+                            total_population: 635
+                          }
+                          pools {
+                            population_offset: 6000002238
+                            total_population: 762
+                          }
+                        }
+                      }
+                    }
+                  }
+               }
+            }
+         }
+      }
+   }
 }
