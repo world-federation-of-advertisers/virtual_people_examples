@@ -2,7 +2,19 @@ name: "root"
 branch_node {
   branches {
     condition {
-      op: TRUE
+     op: OR
+     sub_filters {
+      name: "labeler_input.profile_info.email_user_info.user_id"
+      op: HAS
+      }
+     sub_filters {
+      name: "labeler_input.profile_info.phone_user_info.user_id"
+      op: HAS
+      }
+     sub_filters {
+      name: "labeler_input.profile_info.proprietary_id_space_1_user_info.user_id"
+      op: HAS
+      }
     }
     node {
         name: "cookied"
@@ -16,14 +28,18 @@ branch_node {
                branch_node {
                   branches {
                     condition {
-                     op: TRUE
+                     op: EQUAL
+                     name:"labeler_input.geo.country_id"
+                     value: "1"
                     }
                     node {
                       name: "cookied_pool-GB"
                       branch_node {
                         branches {
                           condition {
-                           op: TRUE
+                           op: EQUAL
+                           name:"labeler_input.user_agent"
+                           value: "phone"
                           }
                           node {
                             name: "cookied_pool-GB-phone"
@@ -110,7 +126,7 @@ branch_node {
                                 node {
                                   name: "cookied_pool-GB-phone-Demo Bucket - F25-34"
                                   branch_node {
-                                     random_seed: "branch_node_random_seed"
+                                    random_seed: "branch_node_random_seed"
                                     branches {
                                       chance: 0.1930248
                                       node{
@@ -393,8 +409,10 @@ branch_node {
                         }
                         branches {
                           condition {
-                           op: TRUE
-                           }
+                           op: EQUAL
+                           name:"labeler_input.user_agent"
+                           value: "email"
+                          }
                           node {
                             name: "cookied_pool-GB-email"
                             branch_node {
@@ -766,14 +784,18 @@ branch_node {
                   }
                   branches {
                     condition {
-                     op: TRUE
+                     op: EQUAL
+                     name:"labeler_input.geo.country_id"
+                     value: "2"
                     }
                     node {
                       name: "cookied_pool-US"
                       branch_node {
                         branches {
                           condition {
-                           op: TRUE
+                           op: EQUAL
+                           name:"labeler_input.user_agent"
+                           value: "phone"
                           }
                           node {
                             name: "cookied_pool-US-phone"
@@ -1143,8 +1165,10 @@ branch_node {
                         }
                         branches {
                           condition {
-                           op: TRUE
-                           }
+                           op: EQUAL
+                           name:"labeler_input.user_agent"
+                           value: "email"
+                          }
                           node {
                             name: "cookied_pool-US-email"
                             branch_node {
@@ -2141,14 +2165,28 @@ branch_node {
    }
    branches {
       condition {
-         op: TRUE
+       op: OR
+       sub_filters {
+        name: "labeler_input.profile_info.email_user_info.user_id"
+        op: NOT
+        }
+       sub_filters {
+        name: "labeler_input.profile_info.phone_user_info.user_id"
+        op: NOT
+        }
+       sub_filters {
+        name: "labeler_input.profile_info.proprietary_id_space_1_user_info.user_id"
+        op: NOT
+        }
       }
       node {
          name: "cookieless_pool"
          branch_node {
             branches {
                condition {
-                  op: TRUE
+                 op: EQUAL
+                 name:"labeler_input.geo.country_id"
+                 value: "1"
                }
                node {
                   name: "cookieless_pool-GB"
@@ -2251,7 +2289,9 @@ branch_node {
             }
             branches {
                condition {
-                  op: TRUE
+                 op: EQUAL
+                 name:"labeler_input.geo.country_id"
+                 value: "2"
                }
                node {
                   name: "cookieless_pool-US"
