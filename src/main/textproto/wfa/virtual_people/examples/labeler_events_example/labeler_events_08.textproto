@@ -2,9 +2,9 @@ labeler_input {
   event_id {
     publisher: "PUBLISHER_08"
     id: "EVENT_08"
-    id_fingerprint: 100000008
+    id_fingerprint: 13268185955474750952
   }
-  timestamp_usec: 1000000008
+  timestamp_usec: 1626847100000008
   user_agent: "USER AGENT STRING EXAMPLE 08"
   geo {
     country_id: 108
@@ -14,7 +14,7 @@ labeler_input {
   profile_info {
     email_user_info {
       user_id: "EMAIL_USER_08"
-      profile_version: "EMAIL_PROFILE_VERSION_08"
+      profile_version: "20210708"
       demo {
         demo_bucket {
           gender: GENDER_MALE
@@ -30,12 +30,12 @@ labeler_input {
         region_id: 200008
         city_id: 20000008
       }
-      creation_time_usec: 2000000008
-      user_id_fingerprint: 200000008
+      creation_time_usec: 1626847100001008
+      user_id_fingerprint: 12510300852863917637
     }
     phone_user_info {
       user_id: "PHONE_USER_08"
-      profile_version: "PHONE_PROFILE_VERSION_08"
+      profile_version: "20210708"
       demo {
         demo_bucket {
           gender: GENDER_FEMALE
@@ -51,18 +51,18 @@ labeler_input {
         region_id: 300008
         city_id: 30000008
       }
-      creation_time_usec: 3000000008
-      user_id_fingerprint: 300000008
+      creation_time_usec: 1626847100002008
+      user_id_fingerprint: 10808066876972993321
     }
     proprietary_id_space_1_user_info {
       user_id: "PROPRIETARY_ID_SPACE_1_USER_08"
-      profile_version: "PROPRIETARY_ID_SPACE_1_PROFILE_VERSION_08"
+      profile_version: "20210708"
       demo {
         demo_bucket {
           gender: GENDER_UNKNOWN
           age {
             min_age: 41
-            open_age_bucket {}
+            max_age: 1000
           }
         }
         confidence: 0.8008
@@ -72,8 +72,8 @@ labeler_input {
         region_id: 400008
         city_id: 40000008
       }
-      creation_time_usec: 4000000008
-      user_id_fingerprint: 400000008
+      creation_time_usec: 1626847100003008
+      user_id_fingerprint: 10424487302714437710
     }
   }
 }
@@ -108,7 +108,7 @@ virtual_person_activities {
       gender: GENDER_UNKNOWN
       age {
         min_age: 41
-        open_age_bucket {}
+        max_age: 1000
       }
     }
   }
@@ -131,4 +131,4 @@ corrected_demo {
     max_age: 40
   }
 }
-acting_fingerprint: 200000008
+acting_fingerprint: 12510300852863917637
