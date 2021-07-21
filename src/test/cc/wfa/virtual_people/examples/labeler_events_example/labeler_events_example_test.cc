@@ -21,9 +21,6 @@
 #include "gtest/gtest.h"
 #include "src/main/proto/wfa/virtual_people/common/model.pb.h"
 
-#define FLAGS_test_srcdir \
-  std::string(testing::UnitTest::GetInstance()->original_working_dir())
-
 namespace wfa_virtual_people {
 namespace {
 
@@ -42,11 +39,15 @@ const char* kTestFiles[] = {
     "labeler_events_10.textproto"
 };
 
+inline std::string GetTestSrcDir() {
+  return testing::UnitTest::GetInstance()->original_working_dir();
+}
+
 TEST(LabelerEventsExampleTest, LoadEvents) {
   for (const char* filename : kTestFiles) {
     LabelerEvent event;
     int fd = open(
-        absl::StrCat(FLAGS_test_srcdir, kTestRelativeDir, filename).c_str(),
+        absl::StrCat(GetTestSrcDir(), kTestRelativeDir, filename).c_str(),
         O_RDONLY);
     EXPECT_GT(fd, 0);
     google::protobuf::io::FileInputStream file_input(fd);
