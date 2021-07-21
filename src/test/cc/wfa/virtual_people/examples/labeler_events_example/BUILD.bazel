@@ -1,0 +1,13 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
+cc_test(
+    name = "labeler_events_example_test",
+    srcs = ["labeler_events_example_test.cc"],
+    data = ["//src/main/textproto/wfa/virtual_people/examples/labeler_events_example"],
+    deps = [
+        "@com_google_absl//absl/strings",
+        "@com_google_protobuf//:protobuf",
+        "@googletest//:gtest_main",
+        "@virtual_people_common//src/main/proto/wfa/virtual_people/common:model_cc_proto",
+    ],
+)

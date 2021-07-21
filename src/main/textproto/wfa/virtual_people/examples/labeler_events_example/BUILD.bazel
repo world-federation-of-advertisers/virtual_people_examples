@@ -1,0 +1,6 @@
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "labeler_events_example",
+    srcs = glob(["*.textproto"]),
+)

@@ -1,0 +1,134 @@
+labeler_input {
+  event_id {
+    publisher: "PUBLISHER_04"
+    id: "EVENT_04"
+    id_fingerprint: 9820135221967981390
+  }
+  timestamp_usec: 1626847100000004
+  user_agent: "USER AGENT STRING EXAMPLE 04"
+  geo {
+    country_id: 104
+    region_id: 100004
+    city_id: 10000004
+  }
+  profile_info {
+    email_user_info {
+      user_id: "EMAIL_USER_04"
+      profile_version: "20210704"
+      demo {
+        demo_bucket {
+          gender: GENDER_MALE
+          age {
+            min_age: 21
+            max_age: 30
+          }
+        }
+        confidence: 0.6004
+      }
+      home_geo {
+        country_id: 204
+        region_id: 200004
+        city_id: 20000004
+      }
+      creation_time_usec: 1626847100001004
+      user_id_fingerprint: 13618068165730570098
+    }
+    phone_user_info {
+      user_id: "PHONE_USER_04"
+      profile_version: "20210704"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 31
+            max_age: 40
+          }
+        }
+        confidence: 0.7004
+      }
+      home_geo {
+        country_id: 304
+        region_id: 300004
+        city_id: 30000004
+      }
+      creation_time_usec: 1626847100002004
+      user_id_fingerprint: 11007216284425213205
+    }
+    proprietary_id_space_1_user_info {
+      user_id: "PROPRIETARY_ID_SPACE_1_USER_04"
+      profile_version: "20210704"
+      demo {
+        demo_bucket {
+          gender: GENDER_UNKNOWN
+          age {
+            min_age: 41
+            max_age: 1000
+          }
+        }
+        confidence: 0.8004
+      }
+      home_geo {
+        country_id: 404
+        region_id: 400004
+        city_id: 40000004
+      }
+      creation_time_usec: 1626847100003004
+      user_id_fingerprint: 11523105312198060022
+    }
+  }
+}
+virtual_person_activities {
+  virtual_person_id: 10000000000004
+  label {
+    demo {
+      gender: GENDER_MALE
+      age {
+        min_age: 21
+        max_age: 30
+      }
+    }
+  }
+}
+virtual_person_activities {
+  virtual_person_id: 20000000000004
+  label {
+    demo {
+      gender: GENDER_FEMALE
+      age {
+        min_age: 31
+        max_age: 40
+      }
+    }
+  }
+}
+virtual_person_activities {
+  virtual_person_id: 30000000000004
+  label {
+    demo {
+      gender: GENDER_UNKNOWN
+      age {
+        min_age: 41
+        max_age: 1000
+      }
+    }
+  }
+}
+is_user_id_free_person: false
+person_country_code: "COUNTRY_CODE_04"
+person_region_code: "REGION_CODE_04"
+acting_demo {
+  gender: GENDER_MALE
+  age {
+    min_age: 21
+    max_age: 30
+  }
+}
+acting_demo_id_space: "email"
+corrected_demo {
+  gender: GENDER_FEMALE
+  age {
+    min_age: 31
+    max_age: 40
+  }
+}
+acting_fingerprint: 13618068165730570098
