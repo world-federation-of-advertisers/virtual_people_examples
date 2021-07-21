@@ -49,7 +49,7 @@ TEST(LabelerEventsExampleTest, LoadEvents) {
     int fd = open(
         absl::StrCat(GetTestSrcDir(), kTestRelativeDir, filename).c_str(),
         O_RDONLY);
-    EXPECT_GT(fd, 0);
+    ASSERT_GT(fd, 0);
     google::protobuf::io::FileInputStream file_input(fd);
     EXPECT_TRUE(google::protobuf::TextFormat::Parse(&file_input, &event));
     close(fd);
