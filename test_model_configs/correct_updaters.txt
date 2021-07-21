@@ -1,0 +1,616 @@
+updates {
+  updates{
+    conditional_merge {
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "phone_user_info.demo.gender"
+               op: EQUAL
+               value: "2"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_from"
+               op: EQUAL
+               value: "18"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_to"
+               op: EQUAL
+               value: "24"
+            }
+         }
+         update {
+            device_user_type: "phone"
+            corrected_demo {
+               gender: 2
+               age {
+                min_age: 18
+                max_age: 24
+               }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "phone_user_info.demo.gender"
+               op: EQUAL
+               value: "2"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_from"
+               op: EQUAL
+               value: "25"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_to"
+               op: EQUAL
+               value: "34"
+            }
+         }
+         update {
+            device_user_type: "phone"
+            corrected_demo {
+              gender: 2
+              age {
+                min_age: 25
+                max_age: 34
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "phone_user_info.demo.gender"
+               op: EQUAL
+               value: "2"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_from"
+               op: EQUAL
+               value: "35"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_to"
+               op: EQUAL
+               value: "99"
+            }
+         }
+         update {
+            device_user_type: "phone"
+            corrected_demo {
+              gender: 2
+              age {
+                min_age: 35
+                max_age: 99
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "phone_user_info.demo.gender"
+               op: EQUAL
+               value: "1"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_from"
+               op: EQUAL
+               value: "18"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_to"
+               op: EQUAL
+               value: "24"
+            }
+         }
+         update {
+            device_user_type: "phone"
+            corrected_demo {
+              gender: 1
+              age {
+                min_age: 18
+                max_age: 24
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "phone_user_info.demo.gender"
+               op: EQUAL
+               value: "1"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_from"
+               op: EQUAL
+               value: "25"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_to"
+               op: EQUAL
+               value: "34"
+            }
+         }
+         update {
+            device_user_type: "phone"
+            corrected_demo {
+              gender: 1
+              age {
+                min_age: 25
+                max_age: 34
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "phone_user_info.demo.gender"
+               op: EQUAL
+               value: "1"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_from"
+               op: EQUAL
+               value: "35"
+            }
+            sub_filters {
+               name: "phone_user_info.demo.age_to"
+               op: EQUAL
+               value: "99"
+            }
+         }
+         update {
+            device_user_type: "phone"
+            corrected_demo {
+              gender: 1
+              age {
+                min_age: 35
+                max_age: 99
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "email_user_info.demo.gender"
+               op: EQUAL
+               value: "2"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_from"
+               op: EQUAL
+               value: "18"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_to"
+               op: EQUAL
+               value: "24"
+            }
+         }
+         update {
+            device_user_type: "email"
+            corrected_demo {
+              gender: 2
+              age {
+                min_age: 18
+                max_age: 24
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "email_user_info.demo.gender"
+               op: EQUAL
+               value: "2"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_from"
+               op: EQUAL
+               value: "25"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_to"
+               op: EQUAL
+               value: "34"
+            }
+         }
+         update {
+            device_user_type: "email"
+            corrected_demo {
+              gender: 2
+              age {
+                min_age: 25
+                max_age: 34
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "email_user_info.demo.gender"
+               op: EQUAL
+               value: "2"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_from"
+               op: EQUAL
+               value: "35"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_to"
+               op: EQUAL
+               value: "99"
+            }
+         }
+         update {
+            device_user_type: "email"
+            corrected_demo {
+              gender: 2
+              age {
+                min_age: 35
+                max_age: 99
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "email_user_info.demo.gender"
+               op: EQUAL
+               value: "1"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_from"
+               op: EQUAL
+               value: "18"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_to"
+               op: EQUAL
+               value: "24"
+            }
+         }
+         update {
+            device_user_type: "email"
+            corrected_demo {
+              gender: 1
+              age {
+                min_age: 18
+                max_age: 24
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "email_user_info.demo.gender"
+               op: EQUAL
+               value: "1"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_from"
+               op: EQUAL
+               value: "25"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_to"
+               op: EQUAL
+               value: "34"
+            }
+         }
+         update {
+            device_user_type: "email"
+            corrected_demo {
+              gender: 1
+              age {
+                min_age: 25
+                max_age: 34
+              }
+            }
+         }
+      }
+      nodes {
+         condition {
+            op: AND
+            sub_filters {
+               name: "email_user_info.demo.gender"
+               op: EQUAL
+               value: "1"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_from"
+               op: EQUAL
+               value: "35"
+            }
+            sub_filters {
+               name: "email_user_info.demo.age_to"
+               op: EQUAL
+               value: "99"
+            }
+         }
+         update {
+            device_user_type: "email"
+            corrected_demo {
+              gender: 1
+              age {
+                min_age: 35
+                max_age: 99
+              }
+            }
+         }
+      }
+    }
+  }
+  updates{
+    update_matrix {
+    columns {
+       person_country_code: "GB"
+       acting_demo {
+          gender: 2
+          age {
+            min_age: 18
+            max_age: 24
+          }
+       }
+    }
+    columns {
+       person_country_code: "GB"
+       acting_demo {
+          gender: 2
+          age {
+            min_age: 25
+            max_age: 34
+          }
+       }
+    }
+    columns {
+       person_country_code: "GB"
+       acting_demo {
+          gender: 2
+          age {
+            min_age: 35
+            max_age: 99
+          }
+       }
+    }
+    columns {
+       person_country_code: "GB"
+       acting_demo {
+          gender: 1
+          age {
+            min_age: 18
+            max_age: 24
+          }
+       }
+    }
+    columns {
+       person_country_code: "GB"
+       acting_demo {
+          gender: 1
+          age {
+            min_age: 25
+            max_age: 34
+          }
+       }
+    }
+    columns {
+       person_country_code: "GB"
+       acting_demo {
+          gender: 1
+          age {
+            min_age: 35
+            max_age: 99
+          }
+       }
+    }
+    columns {
+       person_country_code: "US"
+       acting_demo {
+          gender: 2
+          age {
+            min_age: 18
+            max_age: 24
+          }
+       }
+    }
+    columns {
+       person_country_code: "US"
+       acting_demo {
+          gender: 2
+          age {
+            min_age: 25
+            max_age: 34
+          }
+       }
+    }
+    columns {
+       person_country_code: "US"
+       acting_demo {
+          gender: 2
+          age {
+            min_age: 35
+            max_age: 99
+          }
+       }
+    }
+    columns {
+       person_country_code: "US"
+       acting_demo {
+          gender: 1
+          age {
+            min_age: 18
+            max_age: 24
+          }
+       }
+    }
+    columns {
+       person_country_code: "US"
+       acting_demo {
+          gender: 1
+          age {
+            min_age: 25
+            max_age: 34
+          }
+       }
+    }
+    columns {
+       person_country_code: "US"
+       acting_demo {
+          gender: 1
+          age {
+            min_age: 35
+            max_age: 99
+          }
+       }
+    }
+    rows {
+       corrected_demo {
+          gender: 2
+          age {
+            min_age: 18
+            max_age: 24
+          }
+       }
+    }
+    rows {
+       corrected_demo {
+          gender: 2
+          age {
+            min_age: 25
+            max_age: 34
+          }
+       }
+    }
+    rows {
+       corrected_demo {
+          gender: 2
+          age {
+            min_age: 35
+            max_age: 99
+          }
+       }
+    }
+    rows {
+       corrected_demo {
+          gender: 1
+          age {
+            min_age: 18
+            max_age: 24
+          }
+       }
+    }
+    rows {
+       corrected_demo {
+          gender: 1
+          age {
+            min_age: 25
+            max_age: 34
+          }
+       }
+    }
+    rows {
+       corrected_demo {
+          gender: 1
+          age {
+            min_age: 35
+            max_age: 99
+          }
+       }
+    }
+    probabilities: 0.5
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.55
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.05
+    probabilities: 0.05
+    probabilities: 0.1
+    probabilities: 0.6
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.05
+    probabilities: 0.0
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.65
+    probabilities: 0.1
+    probabilities: 0.05
+    probabilities: 0.05
+    probabilities: 0.05
+    probabilities: 0.05
+    probabilities: 0.1
+    probabilities: 0.7
+    probabilities: 0.05
+    probabilities: 0.0
+    probabilities: 0.0
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.05
+    probabilities: 0.75
+    probabilities: 0.5
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.55
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.05
+    probabilities: 0.05
+    probabilities: 0.1
+    probabilities: 0.6
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.05
+    probabilities: 0.0
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.65
+    probabilities: 0.1
+    probabilities: 0.05
+    probabilities: 0.05
+    probabilities: 0.05
+    probabilities: 0.05
+    probabilities: 0.1
+    probabilities: 0.7
+    probabilities: 0.05
+    probabilities: 0.0
+    probabilities: 0.0
+    probabilities: 0.1
+    probabilities: 0.1
+    probabilities: 0.05
+    probabilities: 0.75
+    }
+  } 
+}
