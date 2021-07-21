@@ -1,11 +1,16 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+# Common-cpp
 http_archive(
-    name = "com_google_googletest",
-    urls = ["https://github.com/google/googletest/archive/release-1.10.0.tar.gz"],
-    sha256 = "9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb",
-    strip_prefix = "googletest-release-1.10.0",
+    name = "wfa_common_cpp",
+    sha256 = "e0e1f5eed832ef396109354a64c6c1306bf0fb5ea0b449ce6ee1e8edc6fe279d",
+    strip_prefix = "common-cpp-43c75acc3394e19bcfd2cfe8e8e2454365d26d60",
+    url = "https://github.com/world-federation-of-advertisers/common-cpp/archive/43c75acc3394e19bcfd2cfe8e8e2454365d26d60.tar.gz",
 )
+
+load("@wfa_common_cpp//build:deps.bzl", "common_cpp_deps")
+
+common_cpp_deps()
 
 http_archive(
     name = "com_google_protobuf",
@@ -17,13 +22,6 @@ http_archive(
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
-
-http_archive(
-    name = "com_google_absl",
-    sha256 = "dd7db6815204c2a62a2160e32c55e97113b0a0178b2f090d6bab5ce36111db4b",
-    strip_prefix = "abseil-cpp-20210324.0",
-    urls = ["https://github.com/abseil/abseil-cpp/archive/refs/tags/20210324.0.tar.gz"],
-)
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
