@@ -51,8 +51,8 @@ TEST(LabelerEventsExampleTest, LoadEvents) {
         O_RDONLY);
     ASSERT_GT(fd, 0);
     google::protobuf::io::FileInputStream file_input(fd);
-    EXPECT_TRUE(google::protobuf::TextFormat::Parse(&file_input, &event));
     file_input.SetCloseOnDelete(true);
+    EXPECT_TRUE(google::protobuf::TextFormat::Parse(&file_input, &event));
   }
 }
 
