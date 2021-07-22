@@ -350,12 +350,12 @@ branch_node {
                                    sub_filters {
                                     name: "corrected_demo.age.min_age"
                                     op: EQUAL
-                                    value: "18"
+                                    value: "35"
                                   }
                                    sub_filters {
                                     name: "corrected_demo.age.max_age"
                                     op: EQUAL
-                                    value: "24"
+                                    value: "99"
                                   }
                                    sub_filters {
                                     name: "corrected_demo.gender"
@@ -722,12 +722,12 @@ branch_node {
                                    sub_filters {
                                     name: "corrected_demo.age.min_age"
                                     op: EQUAL
-                                    value: "18"
+                                    value: "35"
                                   }
                                    sub_filters {
                                     name: "corrected_demo.age.max_age"
                                     op: EQUAL
-                                    value: "24"
+                                    value: "99"
                                   }
                                    sub_filters {
                                     name: "corrected_demo.gender"
@@ -1106,12 +1106,12 @@ branch_node {
                                    sub_filters {
                                     name: "corrected_demo.age.min_age"
                                     op: EQUAL
-                                    value: "18"
+                                    value: "35"
                                   }
                                    sub_filters {
                                     name: "corrected_demo.age.max_age"
                                     op: EQUAL
-                                    value: "24"
+                                    value: "99"
                                   }
                                    sub_filters {
                                     name: "corrected_demo.gender"
@@ -1478,12 +1478,12 @@ branch_node {
                                    sub_filters {
                                     name: "corrected_demo.age.min_age"
                                     op: EQUAL
-                                    value: "18"
+                                    value: "35"
                                   }
                                    sub_filters {
                                     name: "corrected_demo.age.max_age"
                                     op: EQUAL
-                                    value: "24"
+                                    value: "99"
                                   }
                                    sub_filters {
                                     name: "corrected_demo.gender"
@@ -2165,18 +2165,18 @@ branch_node {
    }
    branches {
       condition {
-       op: OR
+       op: NOT
        sub_filters {
         name: "labeler_input.profile_info.email_user_info.user_id"
-        op: NOT
+        op: HAS
         }
        sub_filters {
         name: "labeler_input.profile_info.phone_user_info.user_id"
-        op: NOT
+        op: HAS
         }
        sub_filters {
         name: "labeler_input.profile_info.proprietary_id_space_1_user_info.user_id"
-        op: NOT
+        op: HAS
         }
       }
       node {
