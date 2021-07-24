@@ -136,14 +136,26 @@ LabelerOutputList ApplyLabeler(
 // Represent a row in aggregated report.
 // @count represents the number of added virtual person.
 // @virtual_person_ids represents the set of unique virtual person ids.
-struct AggregatedRow {
-  int64_t count = 0;
-  absl::flat_hash_set<int64_t> virtual_person_ids;
+class AggregatedRow {
+ public:
+  AggregatedRow(): count_(0) {}
+
+  int64_t GetCount() const {
+    return count_;
+  }
+
+  int64_t GetUniqueVirtualPeopleCount() const {
+    return virtual_person_ids_.size();
+  }
 
   void AddVirtualPeople(const int64_t virtual_person_id) {
-    ++count;
-    virtual_person_ids.insert(virtual_person_id);
+    ++count_;
+    virtual_person_ids_.insert(virtual_person_id);
   }
+
+ private:
+  int64_t count_;
+  absl::flat_hash_set<int64_t> virtual_person_ids_;
 };
 
 // Aggregate the output virtual people to total impressions/reach, and
@@ -166,15 +178,15 @@ AggregatedReport AggregateOutput(const LabelerOutputList& labeler_outputs) {
 
   AggregatedReport report;
   AggregatedReport::Row* total_row = report.add_rows();
-  total_row->set_impressions(total.count);
-  total_row->set_reach(total.virtual_person_ids.size());
+  total_row->set_impressions(total.GetCount());
+  total_row->set_reach(total.GetUniqueVirtualPeopleCount());
   for (const auto& label_row : label_rows) {
     AggregatedReport::Row* row = report.add_rows();
     CHECK(row->mutable_attrs()->ParseFromString(label_row.first))
         << "Unable to parse string to PersonLabelAttributes: "
         << label_row.first;
-    row->set_impressions(label_row.second.count);
-    row->set_reach(label_row.second.virtual_person_ids.size());
+    row->set_impressions(label_row.second.GetCount());
+    row->set_reach(label_row.second.GetUniqueVirtualPeopleCount());
   }
 
   return report;
