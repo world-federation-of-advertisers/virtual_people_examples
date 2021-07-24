@@ -100,7 +100,7 @@ std::unique_ptr<Labeler> GetLabeler(
     absl::StatusOr<std::unique_ptr<Labeler>> labeler = Labeler::Build(root);
     CHECK(labeler.ok())
         << "Creating Labler failed with status: " << labeler.status();
-    return std::move(*labeler);
+    return *std::move(labeler);
   }
   if (!model_nodes_path.empty()) {
     CompiledNodeList node_list;
@@ -110,7 +110,7 @@ std::unique_ptr<Labeler> GetLabeler(
     absl::StatusOr<std::unique_ptr<Labeler>> labeler = Labeler::Build(nodes);
     CHECK(labeler.ok())
         << "Creating Labler failed with status: " << labeler.status();
-    return std::move(*labeler);
+    return *std::move(labeler);
   }
   LOG(FATAL) << "Neither model_node_path nor model_nodes_path is set.";
 }
