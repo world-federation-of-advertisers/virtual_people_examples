@@ -19,7 +19,7 @@
 #include "google/protobuf/io/zero_copy_stream_impl.h"
 #include "google/protobuf/text_format.h"
 #include "gtest/gtest.h"
-#include "src/main/proto/wfa/virtual_people/common/model.pb.h"
+#include "wfa/virtual_people/common/model.pb.h"
 
 namespace wfa_virtual_people {
 namespace {
