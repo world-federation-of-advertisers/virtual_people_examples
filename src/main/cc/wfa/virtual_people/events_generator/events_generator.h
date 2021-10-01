@@ -29,6 +29,67 @@ struct PublisherEventId {
   std::string id;
 };
 
+struct EventsGeneratorOptions {
+  // The current timestamp in microseconds.
+  uint64_t current_timestamp;
+  // The count of unique event_id.publisher.
+  uint32_t total_publishers;
+  // The count of unique event_id.id.
+  uint32_t total_events;
+  // The count of unique user_agent when it represents unknown device.
+  uint32_t unknown_device_count;
+  // The count of unique profile_info.email_user_info.user_id.
+  uint32_t email_users_count;
+  // The count of unique profile_info.phone_user_info.user_id.
+  uint32_t phone_users_count;
+  // The count of unique profile_info.proprietary_id_space_1_user_info.user_id.
+  uint32_t proprietary_id_space_1_users_count;
+};
+
+struct EventOptions {
+  // The chance that user_agent represents unknown device.
+  double unknown_device_ratio;
+  // The count of possible country_ids. The value of geo.country_id is between
+  // 100 and (99 + @total_countries).
+  uint32_t total_countries;
+  // The count of possible region_ids for each country_id. The value of last 3
+  // digits of geo.region_id is between 000 to (@regions_per_country - 1).
+  uint32_t regions_per_country;
+  // The count of possible city_ids for each region_id. The value of last 3
+  // digits of geo.city_id is between 000 to (@cities_per_region - 1).
+  uint32_t cities_per_region;
+  // The chance that profile_info.email_user_info is set.
+  double email_events_ratio;
+  // The chance that profile_info.phone_user_info is set.
+  double phone_events_ratio;
+  // The chance that profile_info.proprietary_id_space_1_user_info is set.
+  double proprietary_id_space_1_events_ratio;
+  // Decides the range of profile_version. The value of profile_version is
+  // between @profile_version_days ago to current date.
+  uint32_t profile_version_days;
+};
+
+struct ProfileInfoOptions {
+  // The chance that profile_info.email_user_info is set.
+  double email_events_ratio;
+  // The chance that profile_info.phone_user_info is set.
+  double phone_events_ratio;
+  // The chance that profile_info.proprietary_id_space_1_user_info is set.
+  double proprietary_id_space_1_events_ratio;
+  // Decides the range of profile_version. The value of profile_version is
+  // between @profile_version_days ago to current date.
+  uint32_t profile_version_days;
+  // The count of possible country_ids. The value of geo.country_id is between
+  // 100 and (99 + @total_countries).
+  uint32_t total_countries;
+  // The count of possible region_ids for each country_id. The value of last 3
+  // digits of geo.region_id is between 000 to (@regions_per_country - 1).
+  uint32_t regions_per_country;
+  // The count of possible city_ids for each region_id. The value of last 3
+  // digits of geo.city_id is between 000 to (@cities_per_region - 1).
+  uint32_t cities_per_region;
+};
+
 // EventsGenerator is used to generate random DataProviderEvents. For fields in
 // log_event.labeler_input
 // * event_id.publisher is composed of 8 digits.
@@ -66,57 +127,15 @@ struct PublisherEventId {
 class EventsGenerator {
  public:
   // Initialzies the pseudo-random number generator with default seed.
-  // * @current_timestamp is the current timestamp in microseconds.
-  // * @total_publishers is the count of unique event_id.publisher.
-  // * @total_events is the count of unique event_id.id.
-  // * @unknown_device_count is the count of unique user_agent when it
-  //   represents unknown device.
-  // * @email_users_count is the count of unique
-  //   profile_info.email_user_info.user_id.
-  // * @phone_users_count is the count of unique
-  //   profile_info.phone_user_info.user_id.
-  // * @proprietary_id_space_1_users_count is the count of unique
-  //   profile_info.proprietary_id_space_1_user_info.user_id.
-  EventsGenerator(uint64_t current_timestamp, uint32_t total_publishers,
-                  uint32_t total_events, uint32_t unknown_device_count,
-                  uint32_t email_users_count, uint32_t phone_users_count,
-                  uint32_t proprietary_id_space_1_users_count);
+  EventsGenerator(const EventsGeneratorOptions& options);
 
   // Same as above, but initializes the pseudo-random number generator to set
   // the @seed for the random generator.
-  EventsGenerator(uint64_t current_timestamp, uint32_t total_publishers,
-                  uint32_t total_events, uint32_t unknown_device_count,
-                  uint32_t email_users_count, uint32_t phone_users_count,
-                  uint32_t proprietary_id_space_1_users_count, uint32_t seed);
+  EventsGenerator(const EventsGeneratorOptions& options, uint32_t seed);
 
   // Generates a random DataProviderEvent. Only fields in
   // log_event.labeler_input are set.
-  // * @unknown_device_ratio is chance that user_agent represents unknown
-  //   device.
-  // * @total_countries is the count of possible country_ids. The value of
-  //   geo.country_id is between 100 and (99 + @total_countries).
-  // * @regions_per_country is the count of possible region_ids for each
-  //   country_id. The value of last 3 digits of geo.region_id is between 000 to
-  //   (@regions_per_country - 1).
-  // * @cities_per_region is the count of possible city_ids for each region_id.
-  //   The value of last 3 digits of geo.city_id is between 000 to
-  //   (@cities_per_region - 1).
-  // * @email_events_ratio is the chance that profile_info.email_user_info is
-  //   set.
-  // * @phone_events_ratio is the chance that profile_info.phone_user_info is
-  //   set.
-  // * @proprietary_id_space_1_events_ratio is the chance that
-  //   profile_info.proprietary_id_space_1_user_info is set.
-  // * @profile_version_days decides the range of profile_version. The value of
-  //   profile_version is between @profile_version_days ago to current date.
-  DataProviderEvent GetEvents(double unknown_device_ratio,
-                              uint32_t total_countries,
-                              uint32_t regions_per_country,
-                              uint32_t cities_per_region,
-                              double email_events_ratio,
-                              double phone_events_ratio,
-                              double proprietary_id_space_1_events_ratio,
-                              uint32_t profile_version_days);
+  DataProviderEvent GetEvents(const EventOptions& options);
 
  private:
   void BuildEventIdPool(uint32_t total_publishers, uint32_t total_events);
@@ -133,13 +152,7 @@ class EventsGenerator {
   std::string GetDevice(double unknown_device_ratio);
   GeoLocation GetGeo(uint32_t total_countries, uint32_t regions_per_country,
                      uint32_t cities_per_region);
-  ProfileInfo GetProfileInfo(double email_events_ratio,
-                             double phone_events_ratio,
-                             double proprietary_id_space_1_events_ratio,
-                             uint32_t profile_version_days,
-                             uint32_t total_countries,
-                             uint32_t regions_per_country,
-                             uint32_t cities_per_region);
+  ProfileInfo GetProfileInfo(const ProfileInfoOptions& options);
 
   RandomGenerator random_generator_;
   uint64_t current_timestamp_;

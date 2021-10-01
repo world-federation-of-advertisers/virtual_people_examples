@@ -19,6 +19,7 @@
 #include <random>
 #include <string>
 
+#include "absl/random/distributions.h"
 #include "absl/strings/string_view.h"
 #include "absl/time/civil_time.h"
 #include "glog/logging.h"
@@ -86,8 +87,7 @@ std::string ConvertToLowerLetters(uint64_t code) {
 bool RandomGenerator::GetBool(const double true_chance) {
   CHECK(true_chance >= 0.0 && true_chance <= 1.0)
       << "True chance must be between 0 and 1.";
-  std::uniform_real_distribution<> distrib(0.0, 1.0);
-  double random = distrib(generator_);
+  double random = absl::Uniform(absl::IntervalClosed, generator_, 0.0, 1.0);
   return random < true_chance;
 }
 
@@ -95,8 +95,7 @@ std::string RandomGenerator::GetDigits(const uint32_t length) {
   CHECK(length <= 18) << "The max length is 18.";
   uint64_t min = int_pow(10, length - 1);
   uint64_t max = int_pow(10, length) - 1;
-  std::uniform_int_distribution<uint64_t> distrib(min, max);
-  uint64_t random = distrib(generator_);
+  uint64_t random = absl::Uniform(absl::IntervalClosed, generator_, min, max);
   return std::to_string(random);
 }
 
@@ -104,8 +103,7 @@ std::string RandomGenerator::GetLowerLetters(const uint32_t length) {
   CHECK(length <= 13) << "The max length is 13.";
   uint64_t min = GetLowerLettersStringCodeCut(length - 1) + 1;
   uint64_t max = GetLowerLettersStringCodeCut(length);
-  std::uniform_int_distribution<uint64_t> distrib(min, max);
-  uint64_t random = distrib(generator_);
+  uint64_t random = absl::Uniform(absl::IntervalClosed, generator_, min, max);
   return ConvertToLowerLetters(random);
 }
 
@@ -114,30 +112,28 @@ std::string RandomGenerator::GetLowerLetters(const uint32_t length_min,
   CHECK(length_max <= 13) << "The max length is 13.";
   uint64_t min = GetLowerLettersStringCodeCut(length_min - 1) + 1;
   uint64_t max = GetLowerLettersStringCodeCut(length_max);
-  std::uniform_int_distribution<uint64_t> distrib(min, max);
-  uint64_t random = distrib(generator_);
+  uint64_t random = absl::Uniform(absl::IntervalClosed, generator_, min, max);
   return ConvertToLowerLetters(random);
 }
 
 int32_t RandomGenerator::GetInteger(const int32_t min, const int32_t max) {
   CHECK(min <= max) << "max must be no less than min.";
-  std::uniform_int_distribution<int32_t> distrib(min, max);
-  return distrib(generator_);
+  return absl::Uniform(absl::IntervalClosed, generator_, min, max);
 }
 
 uint64_t RandomGenerator::GetTimestampUsecInNDays(
     const uint64_t current_timestamp, const uint32_t n) {
   CHECK(n <= 10000) << "N should be at most 10000.";
-  std::uniform_int_distribution<uint64_t> distrib(
+  return absl::Uniform(
+      absl::IntervalClosed, generator_,
       current_timestamp - n * kMicrosecPerDay, current_timestamp);
-  return distrib(generator_);
 }
 
 absl::CivilDay RandomGenerator::GetDateInNDays(absl::CivilDay current_date,
                                                const uint32_t n) {
   CHECK(n <= 10000) << "N should be at most 10000.";
-  std::uniform_int_distribution<uint32_t> distrib(0, n);
-  uint32_t days = distrib(generator_);
+  uint32_t days = absl::Uniform(
+      absl::IntervalClosed, generator_, (uint32_t)0, n);
   return current_date - days;
 }
 

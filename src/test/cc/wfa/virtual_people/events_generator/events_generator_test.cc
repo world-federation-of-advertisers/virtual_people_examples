@@ -89,13 +89,13 @@ void ProfileInfoSanityCheck(const ProfileInfo& profile_info,
                             const uint32_t cities_per_region) {
   if (profile_info.has_email_user_info()) {
     EXPECT_THAT(profile_info.email_user_info().user_id(),
-                MatchesRegex("[a-z]{1,10}@[a-z]{4,8}\\.com"));
+                MatchesRegex("[a-z]{1,10}@[a-z]{4,8}\\.example.com"));
     UserInfoSanityCheck(profile_info.email_user_info(), total_countries,
                         regions_per_country, cities_per_region);
   }
   if (profile_info.has_phone_user_info()) {
     EXPECT_THAT(profile_info.phone_user_info().user_id(),
-                MatchesRegex("[0-9]{10}"));
+                MatchesRegex("\\+\\(555\\)[0-9]{3}-[0-9]{4}"));
     UserInfoSanityCheck(profile_info.phone_user_info(), total_countries,
                         regions_per_country, cities_per_region);
   }
@@ -114,20 +114,29 @@ TEST(EventsGeneratorTest, SanityCheck) {
   uint32_t total_countries = 10;
   uint32_t regions_per_country = 10;
   uint32_t cities_per_region = 10;
-  EventsGenerator generator(current_timestamp,
-                            /* total_publishers = */ 10, total_events,
-                            /* unknown_device_count = */ 100,
-                            /* email_users_count = */ 100,
-                            /* phone_users_count = */ 100,
-                            /* proprietary_id_space_1_users_count = */ 100);
+
+  EventsGeneratorOptions events_generator_options({
+      current_timestamp,
+      /* total_publishers = */ 10,
+      total_events,
+      /* unknown_device_count = */ 100,
+      /* email_users_count = */ 100,
+      /* phone_users_count = */ 100,
+      /* proprietary_id_space_1_users_count = */ 100});
+  
+  EventOptions event_options({
+      /* unknown_device_ratio = */ 0.5,
+      total_countries,
+      regions_per_country,
+      cities_per_region,
+      /* email_events_ratio = */ 0.5,
+      /* phone_events_ratio = */ 0.5,
+      /* proprietary_id_space_1_events_ratio = */ 0.5,
+      /* profile_version_days = */ 1});
+
+  EventsGenerator generator(events_generator_options);
   for (int i = 0; i < total_events; i++) {
-    DataProviderEvent event = generator.GetEvents(
-        /* unknown_device_ratio = */ 0.5, total_countries, regions_per_country,
-        cities_per_region,
-        /* email_events_ratio = */ 0.5,
-        /* phone_events_ratio = */ 0.5,
-        /* proprietary_id_space_1_events_ratio = */ 0.5,
-        /* profile_version_days = */ 1);
+    DataProviderEvent event = generator.GetEvents(event_options);
     const LabelerInput& labeler_input = event.log_event().labeler_input();
     PublisherSanityCheck(labeler_input.event_id().publisher());
     IdSanityCheck(labeler_input.event_id().id());

@@ -84,24 +84,30 @@ int main(int argc, char** argv) {
   std::string output_dir = absl::GetFlag(FLAGS_output_dir);
   CHECK(!output_dir.empty()) << "output_dir is not set.";
 
-  wfa_virtual_people::EventsGenerator generator(
-      absl::ToUnixMicros(absl::Now()), absl::GetFlag(FLAGS_total_publishers),
+  wfa_virtual_people::EventsGeneratorOptions event_generator_options({
+      static_cast<uint64_t>(absl::ToUnixMicros(absl::Now())),
+      absl::GetFlag(FLAGS_total_publishers),
       absl::GetFlag(FLAGS_total_events),
       absl::GetFlag(FLAGS_unknown_device_count),
       absl::GetFlag(FLAGS_email_users_count),
       absl::GetFlag(FLAGS_phone_users_count),
-      absl::GetFlag(FLAGS_proprietary_id_space_1_users_count));
+      absl::GetFlag(FLAGS_proprietary_id_space_1_users_count)});
+
+  wfa_virtual_people::EventOptions event_options({
+      absl::GetFlag(FLAGS_unknown_device_ratio),
+      absl::GetFlag(FLAGS_total_countries),
+      absl::GetFlag(FLAGS_regions_per_country),
+      absl::GetFlag(FLAGS_cities_per_region),
+      absl::GetFlag(FLAGS_email_events_ratio),
+      absl::GetFlag(FLAGS_phone_events_ratio),
+      absl::GetFlag(FLAGS_proprietary_id_space_1_events_ratio),
+      absl::GetFlag(FLAGS_profile_version_days)});
+
+  wfa_virtual_people::EventsGenerator generator(event_generator_options);
 
   for (int i = 0; i < absl::GetFlag(FLAGS_total_events); i++) {
-    wfa_virtual_people::DataProviderEvent event = generator.GetEvents(
-        absl::GetFlag(FLAGS_unknown_device_ratio),
-        absl::GetFlag(FLAGS_total_countries),
-        absl::GetFlag(FLAGS_regions_per_country),
-        absl::GetFlag(FLAGS_cities_per_region),
-        absl::GetFlag(FLAGS_email_events_ratio),
-        absl::GetFlag(FLAGS_phone_events_ratio),
-        absl::GetFlag(FLAGS_proprietary_id_space_1_events_ratio),
-        absl::GetFlag(FLAGS_profile_version_days));
+    wfa_virtual_people::DataProviderEvent event =
+        generator.GetEvents(event_options);
     WriteTextProtoFile(absl::StrCat(output_dir, "/event_", i + 1, ".textproto"),
                        event);
   }

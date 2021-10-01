@@ -19,7 +19,6 @@
 #include <utility>
 #include <vector>
 
-#include "absl/container/flat_hash_map.h"
 #include "absl/container/flat_hash_set.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
@@ -33,6 +32,8 @@
 
 namespace wfa_virtual_people {
 
+namespace {
+
 // Converts a timestamp in microseconds to a CivilDay, using UTC time zone.
 absl::CivilDay ConvertToDay(const uint64_t timestamp_usec) {
   absl::Time time = absl::FromUnixMicros(timestamp_usec);
@@ -43,183 +44,6 @@ absl::CivilDay ConvertToDay(const uint64_t timestamp_usec) {
 uint64_t ConvertToTimestampUsec(absl::CivilDay day) {
   absl::Time t = absl::FromCivil(day, absl::UTCTimeZone());
   return absl::ToUnixMicros(t);
-}
-
-void EventsGenerator::BuildEventIdPool(const uint32_t total_publishers,
-                                       const uint32_t total_events) {
-  CHECK(total_publishers > 0 && total_publishers <= 100)
-      << "total_publishers must be a positive integer no larger than 100.";
-  CHECK(total_events > 0 && total_events <= 1000000)
-      << "total_events must be a positive integer no larger than 1000000.";
-  // Key is the publisher. Value is the count of existing ids for the publisher.
-  absl::flat_hash_map<std::string, uint32_t> publishers;
-  // A set of existing ids.
-  absl::flat_hash_set<std::string> ids;
-  while (publishers.size() < total_publishers) {
-    std::string publisher = random_generator_.GetDigits(8);
-    if (publishers.find(publisher) != publishers.end()) {
-      continue;
-    }
-    publishers[publisher] = 0;
-    // Gets the total count of events for this publisher.
-    uint32_t events_for_publisher = total_events / total_publishers;
-    if (publishers.size() <= total_events % total_publishers) {
-      ++events_for_publisher;
-    }
-    while (publishers.at(publisher) < events_for_publisher) {
-      std::string id = random_generator_.GetDigits(16);
-      if (ids.find(id) != ids.end()) {
-        continue;
-      }
-      ids.insert(id);
-      ++publishers[publisher];
-      event_id_pool_.push_back(PublisherEventId({publisher, id}));
-    }
-  }
-}
-
-void EventsGenerator::BuildUnknownDevicePool(
-    const uint32_t unknown_device_count) {
-  CHECK(unknown_device_count > 0 && unknown_device_count <= 10000)
-      << "unknown_device_count must be a positive integer no larger than "
-         "10000.";
-  absl::flat_hash_set<std::string> unknown_devices;
-  while (unknown_devices.size() < unknown_device_count) {
-    std::string unknown_device = random_generator_.GetLowerLetters(10);
-    if (unknown_devices.find(unknown_device) != unknown_devices.end()) {
-      continue;
-    }
-    unknown_devices.insert(unknown_device);
-    unknown_device_pool_.push_back(unknown_device);
-  }
-}
-
-void EventsGenerator::BuildEmailPool(const uint32_t email_users_count) {
-  CHECK(email_users_count > 0 && email_users_count <= 10000)
-      << "email_users_count must be a positive integer no larger than 10000.";
-  absl::flat_hash_set<std::string> emails;
-  while (emails.size() < email_users_count) {
-    std::string email =
-        absl::StrCat(random_generator_.GetLowerLetters(1, 10), "@",
-                     random_generator_.GetLowerLetters(4, 8), ".com");
-    if (emails.find(email) != emails.end()) {
-      continue;
-    }
-    emails.insert(email);
-    email_pool_.push_back(email);
-  }
-}
-
-void EventsGenerator::BuildPhonePool(const uint32_t phone_users_count) {
-  CHECK(phone_users_count > 0 && phone_users_count <= 10000)
-      << "phone_users_count must be a positive integer no larger than 10000.";
-  absl::flat_hash_set<std::string> phones;
-  while (phones.size() < phone_users_count) {
-    std::string phone = random_generator_.GetDigits(10);
-    if (phones.find(phone) != phones.end()) {
-      continue;
-    }
-    phones.insert(phone);
-    phone_pool_.push_back(phone);
-  }
-}
-
-void EventsGenerator::BuildProprietaryIdSpace1Pool(
-    const uint32_t proprietary_id_space_1_users_count) {
-  CHECK(proprietary_id_space_1_users_count > 0 &&
-        proprietary_id_space_1_users_count <= 10000)
-      << "proprietary_id_space_1_users_count must be a positive integer no "
-         "larger than 10000.";
-  absl::flat_hash_set<std::string> proprietary_id_space_1s;
-  while (proprietary_id_space_1s.size() < proprietary_id_space_1_users_count) {
-    std::string proprietary_id_space_1 = random_generator_.GetDigits(16);
-    if (proprietary_id_space_1s.find(proprietary_id_space_1) !=
-        proprietary_id_space_1s.end()) {
-      continue;
-    }
-    proprietary_id_space_1s.insert(proprietary_id_space_1);
-    proprietary_id_space_1_pool_.push_back(proprietary_id_space_1);
-  }
-}
-
-void EventsGenerator::Initialize(
-    const uint32_t total_publishers, const uint32_t total_events,
-    const uint32_t unknown_device_count, const uint32_t email_users_count,
-    const uint32_t phone_users_count,
-    const uint32_t proprietary_id_space_1_users_count) {
-  BuildEventIdPool(total_publishers, total_events);
-  BuildUnknownDevicePool(unknown_device_count);
-  BuildEmailPool(email_users_count);
-  BuildPhonePool(phone_users_count);
-  BuildProprietaryIdSpace1Pool(proprietary_id_space_1_users_count);
-}
-
-EventsGenerator::EventsGenerator(
-    const uint64_t current_timestamp, const uint32_t total_publishers,
-    const uint32_t total_events, const uint32_t unknown_device_count,
-    const uint32_t email_users_count, const uint32_t phone_users_count,
-    const uint32_t proprietary_id_space_1_users_count)
-    : current_timestamp_(current_timestamp),
-      current_day_(ConvertToDay(current_timestamp)) {
-  Initialize(total_publishers, total_events, unknown_device_count,
-             email_users_count, phone_users_count,
-             proprietary_id_space_1_users_count);
-}
-
-EventsGenerator::EventsGenerator(
-    const uint64_t current_timestamp, const uint32_t total_publishers,
-    const uint32_t total_events, const uint32_t unknown_device_count,
-    const uint32_t email_users_count, const uint32_t phone_users_count,
-    const uint32_t proprietary_id_space_1_users_count, const uint32_t seed)
-    : random_generator_(seed),
-      current_timestamp_(current_timestamp),
-      current_day_(ConvertToDay(current_timestamp)) {
-  Initialize(total_publishers, total_events, unknown_device_count,
-             email_users_count, phone_users_count,
-             proprietary_id_space_1_users_count);
-}
-
-EventId EventsGenerator::GetEventId() {
-  CHECK(!event_id_pool_.empty()) << "All event ids are used.";
-  PublisherEventId event_id = event_id_pool_.back();
-  event_id_pool_.pop_back();
-  EventId output;
-  output.set_publisher(event_id.publisher);
-  output.set_id(event_id.id);
-  return output;
-}
-
-std::string EventsGenerator::GetDevice(const double unknown_device_ratio) {
-  CHECK(unknown_device_ratio >= 0.0 && unknown_device_ratio <= 1.0)
-      << "unknown_device_ratio must be between 0 and 1.";
-  bool is_unknown = random_generator_.GetBool(unknown_device_ratio);
-  if (is_unknown) {
-    int index =
-        random_generator_.GetInteger(0, unknown_device_pool_.size() - 1);
-    return unknown_device_pool_.at(index);
-  }
-  return std::to_string(random_generator_.GetInteger(0, 99));
-}
-
-GeoLocation EventsGenerator::GetGeo(const uint32_t total_countries,
-                                    const uint32_t regions_per_country,
-                                    const uint32_t cities_per_region) {
-  CHECK(total_countries >= 1 && total_countries <= 900)
-      << "total_countries must be between 1 and 900.";
-  CHECK(regions_per_country >= 1 && regions_per_country <= 1000)
-      << "regions_per_country must be between 1 and 1000.";
-  CHECK(cities_per_region >= 1 && cities_per_region <= 1000)
-      << "cities_per_region must be between 1 and 1000.";
-  int32_t country_id = random_generator_.GetInteger(100, 99 + total_countries);
-  int32_t region_id = country_id * 1000 +
-                      random_generator_.GetInteger(0, regions_per_country - 1);
-  int32_t city_id =
-      region_id * 1000 + random_generator_.GetInteger(0, cities_per_region - 1);
-  GeoLocation geo;
-  geo.set_country_id(country_id);
-  geo.set_region_id(region_id);
-  geo.set_city_id(city_id);
-  return geo;
 }
 
 DemoInfo GetUserInfoDemo(RandomGenerator& random_generator,
@@ -321,47 +145,209 @@ UserInfo GetUserInfo(RandomGenerator& random_generator,
   return user_info;
 }
 
+}  // namespace
+
+void EventsGenerator::BuildEventIdPool(const uint32_t total_publishers,
+                                       const uint32_t total_events) {
+  CHECK(total_publishers > 0 && total_publishers <= 100)
+      << "total_publishers must be a positive integer no larger than 100.";
+  CHECK(total_events > 0 && total_events <= 1000000)
+      << "total_events must be a positive integer no larger than 1000000.";
+  // A set of existing publishers.
+  absl::flat_hash_set<std::string> publishers;
+  // A set of existing ids.
+  absl::flat_hash_set<std::string> ids;
+  while (publishers.size() < total_publishers) {
+    std::string publisher = random_generator_.GetDigits(8);
+    auto [publisher_itr, publisher_inserted] = publishers.insert(publisher);
+    if (!publisher_inserted) continue;
+    // Gets the total count of events for this publisher.
+    uint32_t events_for_publisher = total_events / total_publishers;
+    if (publishers.size() <= total_events % total_publishers) {
+      ++events_for_publisher;
+    }
+    uint32_t event_count = 0;
+    while (event_count < events_for_publisher) {
+      std::string id = random_generator_.GetDigits(16);
+      auto [id_itr, id_inserted] = ids.insert(id);
+      if (!id_inserted) continue;
+      ++event_count;
+      event_id_pool_.push_back(PublisherEventId({publisher, id}));
+    }
+  }
+}
+
+void EventsGenerator::BuildUnknownDevicePool(
+    const uint32_t unknown_device_count) {
+  CHECK(unknown_device_count > 0 && unknown_device_count <= 10000)
+      << "unknown_device_count must be a positive integer no larger than "
+         "10000.";
+  absl::flat_hash_set<std::string> unknown_devices;
+  while (unknown_devices.size() < unknown_device_count) {
+    std::string unknown_device = random_generator_.GetLowerLetters(10);
+    auto [itr, inserted] = unknown_devices.insert(unknown_device);
+    if (!inserted) continue;
+    unknown_device_pool_.push_back(unknown_device);
+  }
+}
+
+void EventsGenerator::BuildEmailPool(const uint32_t email_users_count) {
+  CHECK(email_users_count > 0 && email_users_count <= 10000)
+      << "email_users_count must be a positive integer no larger than 10000.";
+  absl::flat_hash_set<std::string> emails;
+  while (emails.size() < email_users_count) {
+    std::string email =
+        absl::StrCat(random_generator_.GetLowerLetters(1, 10), "@",
+                     random_generator_.GetLowerLetters(4, 8), ".example.com");
+    auto [itr, inserted] = emails.insert(email);
+    if (!inserted) continue;
+    email_pool_.push_back(email);
+  }
+}
+
+void EventsGenerator::BuildPhonePool(const uint32_t phone_users_count) {
+  CHECK(phone_users_count > 0 && phone_users_count <= 10000)
+      << "phone_users_count must be a positive integer no larger than 10000.";
+  absl::flat_hash_set<std::string> phones;
+  while (phones.size() < phone_users_count) {
+    std::string phone = absl::StrCat(
+        "+(555)", random_generator_.GetDigits(3), "-",
+        random_generator_.GetDigits(4));
+    auto [itr, inserted] = phones.insert(phone);
+    if (!inserted) continue;
+    phone_pool_.push_back(phone);
+  }
+}
+
+void EventsGenerator::BuildProprietaryIdSpace1Pool(
+    const uint32_t proprietary_id_space_1_users_count) {
+  CHECK(proprietary_id_space_1_users_count > 0 &&
+        proprietary_id_space_1_users_count <= 10000)
+      << "proprietary_id_space_1_users_count must be a positive integer no "
+         "larger than 10000.";
+  absl::flat_hash_set<std::string> proprietary_id_space_1s;
+  while (proprietary_id_space_1s.size() < proprietary_id_space_1_users_count) {
+    std::string proprietary_id_space_1 = random_generator_.GetDigits(16);
+    auto [itr, inserted] =
+        proprietary_id_space_1s.insert(proprietary_id_space_1);
+    if (!inserted) continue;
+    proprietary_id_space_1_pool_.push_back(proprietary_id_space_1);
+  }
+}
+
+void EventsGenerator::Initialize(
+    const uint32_t total_publishers, const uint32_t total_events,
+    const uint32_t unknown_device_count, const uint32_t email_users_count,
+    const uint32_t phone_users_count,
+    const uint32_t proprietary_id_space_1_users_count) {
+  BuildEventIdPool(total_publishers, total_events);
+  BuildUnknownDevicePool(unknown_device_count);
+  BuildEmailPool(email_users_count);
+  BuildPhonePool(phone_users_count);
+  BuildProprietaryIdSpace1Pool(proprietary_id_space_1_users_count);
+}
+
+EventsGenerator::EventsGenerator(const EventsGeneratorOptions& options):
+    current_timestamp_(options.current_timestamp),
+    current_day_(ConvertToDay(options.current_timestamp)) {
+  Initialize(options.total_publishers, options.total_events,
+             options.unknown_device_count,
+             options.email_users_count, options.phone_users_count,
+             options.proprietary_id_space_1_users_count);
+}
+
+EventsGenerator::EventsGenerator(
+    const EventsGeneratorOptions& options, const uint32_t seed)
+    : random_generator_(seed),
+      current_timestamp_(options.current_timestamp),
+      current_day_(ConvertToDay(options.current_timestamp)) {
+  Initialize(options.total_publishers, options.total_events,
+             options.unknown_device_count,
+             options.email_users_count, options.phone_users_count,
+             options.proprietary_id_space_1_users_count);
+}
+
+EventId EventsGenerator::GetEventId() {
+  CHECK(!event_id_pool_.empty()) << "All event ids are used.";
+  PublisherEventId event_id = event_id_pool_.back();
+  event_id_pool_.pop_back();
+  EventId output;
+  output.set_publisher(event_id.publisher);
+  output.set_id(event_id.id);
+  return output;
+}
+
+std::string EventsGenerator::GetDevice(const double unknown_device_ratio) {
+  CHECK(unknown_device_ratio >= 0.0 && unknown_device_ratio <= 1.0)
+      << "unknown_device_ratio must be between 0 and 1.";
+  bool is_unknown = random_generator_.GetBool(unknown_device_ratio);
+  if (is_unknown) {
+    int index =
+        random_generator_.GetInteger(0, unknown_device_pool_.size() - 1);
+    return unknown_device_pool_.at(index);
+  }
+  return std::to_string(random_generator_.GetInteger(0, 99));
+}
+
+GeoLocation EventsGenerator::GetGeo(const uint32_t total_countries,
+                                    const uint32_t regions_per_country,
+                                    const uint32_t cities_per_region) {
+  CHECK(total_countries >= 1 && total_countries <= 900)
+      << "total_countries must be between 1 and 900.";
+  CHECK(regions_per_country >= 1 && regions_per_country <= 1000)
+      << "regions_per_country must be between 1 and 1000.";
+  CHECK(cities_per_region >= 1 && cities_per_region <= 1000)
+      << "cities_per_region must be between 1 and 1000.";
+  int32_t country_id = random_generator_.GetInteger(100, 99 + total_countries);
+  int32_t region_id = country_id * 1000 +
+                      random_generator_.GetInteger(0, regions_per_country - 1);
+  int32_t city_id =
+      region_id * 1000 + random_generator_.GetInteger(0, cities_per_region - 1);
+  GeoLocation geo;
+  geo.set_country_id(country_id);
+  geo.set_region_id(region_id);
+  geo.set_city_id(city_id);
+  return geo;
+}
+
 ProfileInfo EventsGenerator::GetProfileInfo(
-    const double email_events_ratio, const double phone_events_ratio,
-    const double proprietary_id_space_1_events_ratio,
-    const uint32_t profile_version_days, const uint32_t total_countries,
-    const uint32_t regions_per_country, const uint32_t cities_per_region) {
-  CHECK(email_events_ratio >= 0.0 && email_events_ratio <= 1.0)
+    const ProfileInfoOptions& options) {
+  CHECK(options.email_events_ratio >= 0.0 && options.email_events_ratio <= 1.0)
       << "email_events_ratio must be between 0 and 1.";
-  CHECK(phone_events_ratio >= 0.0 && phone_events_ratio <= 1.0)
+  CHECK(options.phone_events_ratio >= 0.0 && options.phone_events_ratio <= 1.0)
       << "phone_events_ratio must be between 0 and 1.";
-  CHECK(proprietary_id_space_1_events_ratio >= 0.0 &&
-        proprietary_id_space_1_events_ratio <= 1.0)
+  CHECK(options.proprietary_id_space_1_events_ratio >= 0.0 &&
+        options.proprietary_id_space_1_events_ratio <= 1.0)
       << "proprietary_id_space_1_events_ratio must be between 0 and 1.";
-  CHECK(profile_version_days <= 3)
+  CHECK(options.profile_version_days <= 3)
       << "profile_version_days must be no larger than 3.";
 
   ProfileInfo profile_info;
-  if (random_generator_.GetBool(email_events_ratio)) {
+  if (random_generator_.GetBool(options.email_events_ratio)) {
     *profile_info.mutable_email_user_info() = GetUserInfo(
-        random_generator_, email_pool_, current_day_, profile_version_days,
-        total_countries, regions_per_country, cities_per_region);
+        random_generator_, email_pool_, current_day_,
+        options.profile_version_days,
+        options.total_countries, options.regions_per_country,
+        options.cities_per_region);
   }
-  if (random_generator_.GetBool(phone_events_ratio)) {
+  if (random_generator_.GetBool(options.phone_events_ratio)) {
     *profile_info.mutable_phone_user_info() = GetUserInfo(
-        random_generator_, phone_pool_, current_day_, profile_version_days,
-        total_countries, regions_per_country, cities_per_region);
+        random_generator_, phone_pool_, current_day_,
+        options.profile_version_days,
+        options.total_countries, options.regions_per_country,
+        options.cities_per_region);
   }
-  if (random_generator_.GetBool(proprietary_id_space_1_events_ratio)) {
-    *profile_info.mutable_proprietary_id_space_1_user_info() =
-        GetUserInfo(random_generator_, proprietary_id_space_1_pool_,
-                    current_day_, profile_version_days, total_countries,
-                    regions_per_country, cities_per_region);
+  if (random_generator_.GetBool(options.proprietary_id_space_1_events_ratio)) {
+    *profile_info.mutable_proprietary_id_space_1_user_info() = GetUserInfo(
+        random_generator_, proprietary_id_space_1_pool_, current_day_,
+        options.profile_version_days,
+        options.total_countries, options.regions_per_country,
+        options.cities_per_region);
   }
   return profile_info;
 }
 
-DataProviderEvent EventsGenerator::GetEvents(
-    const double unknown_device_ratio, const uint32_t total_countries,
-    const uint32_t regions_per_country, const uint32_t cities_per_region,
-    const double email_events_ratio, const double phone_events_ratio,
-    const double proprietary_id_space_1_events_ratio,
-    const uint32_t profile_version_days) {
+DataProviderEvent EventsGenerator::GetEvents(const EventOptions& options) {
   DataProviderEvent event;
   LabelerInput* labeler_input =
       event.mutable_log_event()->mutable_labeler_input();
@@ -371,15 +357,18 @@ DataProviderEvent EventsGenerator::GetEvents(
   labeler_input->set_timestamp_usec(
       random_generator_.GetTimestampUsecInNDays(current_timestamp_, 30));
 
-  labeler_input->set_user_agent(GetDevice(unknown_device_ratio));
+  labeler_input->set_user_agent(GetDevice(options.unknown_device_ratio));
 
-  *labeler_input->mutable_geo() =
-      GetGeo(total_countries, regions_per_country, cities_per_region);
+  *labeler_input->mutable_geo() = GetGeo(
+      options.total_countries, options.regions_per_country,
+      options.cities_per_region);
 
-  *labeler_input->mutable_profile_info() =
-      GetProfileInfo(email_events_ratio, phone_events_ratio,
-                     proprietary_id_space_1_events_ratio, profile_version_days,
-                     total_countries, regions_per_country, cities_per_region);
+  *labeler_input->mutable_profile_info() = GetProfileInfo({
+      options.email_events_ratio, options.phone_events_ratio,
+      options.proprietary_id_space_1_events_ratio,
+      options.profile_version_days,
+      options.total_countries, options.regions_per_country,
+      options.cities_per_region});
 
   return event;
 }
