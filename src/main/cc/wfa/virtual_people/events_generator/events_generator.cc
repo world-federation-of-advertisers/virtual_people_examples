@@ -210,9 +210,8 @@ void EventsGenerator::BuildPhonePool(const uint32_t phone_users_count) {
       << "phone_users_count must be a positive integer no larger than 10000.";
   absl::flat_hash_set<std::string> phones;
   while (phones.size() < phone_users_count) {
-    std::string phone = absl::StrCat(
-        "+(555)", random_generator_.GetDigits(3), "-",
-        random_generator_.GetDigits(4));
+    std::string phone = absl::StrCat("+(555)", random_generator_.GetDigits(3),
+                                     "-", random_generator_.GetDigits(4));
     auto [itr, inserted] = phones.insert(phone);
     if (!inserted) continue;
     phone_pool_.push_back(phone);
@@ -247,23 +246,23 @@ void EventsGenerator::Initialize(
   BuildProprietaryIdSpace1Pool(proprietary_id_space_1_users_count);
 }
 
-EventsGenerator::EventsGenerator(const EventsGeneratorOptions& options):
-    current_timestamp_(options.current_timestamp),
-    current_day_(ConvertToDay(options.current_timestamp)) {
+EventsGenerator::EventsGenerator(const EventsGeneratorOptions& options)
+    : current_timestamp_(options.current_timestamp),
+      current_day_(ConvertToDay(options.current_timestamp)) {
   Initialize(options.total_publishers, options.total_events,
-             options.unknown_device_count,
-             options.email_users_count, options.phone_users_count,
+             options.unknown_device_count, options.email_users_count,
+             options.phone_users_count,
              options.proprietary_id_space_1_users_count);
 }
 
-EventsGenerator::EventsGenerator(
-    const EventsGeneratorOptions& options, const uint32_t seed)
+EventsGenerator::EventsGenerator(const EventsGeneratorOptions& options,
+                                 const uint32_t seed)
     : random_generator_(seed),
       current_timestamp_(options.current_timestamp),
       current_day_(ConvertToDay(options.current_timestamp)) {
   Initialize(options.total_publishers, options.total_events,
-             options.unknown_device_count,
-             options.email_users_count, options.phone_users_count,
+             options.unknown_device_count, options.email_users_count,
+             options.phone_users_count,
              options.proprietary_id_space_1_users_count);
 }
 
@@ -310,8 +309,7 @@ GeoLocation EventsGenerator::GetGeo(const uint32_t total_countries,
   return geo;
 }
 
-ProfileInfo EventsGenerator::GetProfileInfo(
-    const ProfileInfoOptions& options) {
+ProfileInfo EventsGenerator::GetProfileInfo(const ProfileInfoOptions& options) {
   CHECK(options.email_events_ratio >= 0.0 && options.email_events_ratio <= 1.0)
       << "email_events_ratio must be between 0 and 1.";
   CHECK(options.phone_events_ratio >= 0.0 && options.phone_events_ratio <= 1.0)
@@ -324,25 +322,22 @@ ProfileInfo EventsGenerator::GetProfileInfo(
 
   ProfileInfo profile_info;
   if (random_generator_.GetBool(options.email_events_ratio)) {
-    *profile_info.mutable_email_user_info() = GetUserInfo(
-        random_generator_, email_pool_, current_day_,
-        options.profile_version_days,
-        options.total_countries, options.regions_per_country,
-        options.cities_per_region);
+    *profile_info.mutable_email_user_info() =
+        GetUserInfo(random_generator_, email_pool_, current_day_,
+                    options.profile_version_days, options.total_countries,
+                    options.regions_per_country, options.cities_per_region);
   }
   if (random_generator_.GetBool(options.phone_events_ratio)) {
-    *profile_info.mutable_phone_user_info() = GetUserInfo(
-        random_generator_, phone_pool_, current_day_,
-        options.profile_version_days,
-        options.total_countries, options.regions_per_country,
-        options.cities_per_region);
+    *profile_info.mutable_phone_user_info() =
+        GetUserInfo(random_generator_, phone_pool_, current_day_,
+                    options.profile_version_days, options.total_countries,
+                    options.regions_per_country, options.cities_per_region);
   }
   if (random_generator_.GetBool(options.proprietary_id_space_1_events_ratio)) {
     *profile_info.mutable_proprietary_id_space_1_user_info() = GetUserInfo(
         random_generator_, proprietary_id_space_1_pool_, current_day_,
-        options.profile_version_days,
-        options.total_countries, options.regions_per_country,
-        options.cities_per_region);
+        options.profile_version_days, options.total_countries,
+        options.regions_per_country, options.cities_per_region);
   }
   return profile_info;
 }
@@ -359,16 +354,15 @@ DataProviderEvent EventsGenerator::GetEvents(const EventOptions& options) {
 
   labeler_input->set_user_agent(GetDevice(options.unknown_device_ratio));
 
-  *labeler_input->mutable_geo() = GetGeo(
-      options.total_countries, options.regions_per_country,
-      options.cities_per_region);
+  *labeler_input->mutable_geo() =
+      GetGeo(options.total_countries, options.regions_per_country,
+             options.cities_per_region);
 
-  *labeler_input->mutable_profile_info() = GetProfileInfo({
-      options.email_events_ratio, options.phone_events_ratio,
-      options.proprietary_id_space_1_events_ratio,
-      options.profile_version_days,
-      options.total_countries, options.regions_per_country,
-      options.cities_per_region});
+  *labeler_input->mutable_profile_info() =
+      GetProfileInfo({options.email_events_ratio, options.phone_events_ratio,
+                      options.proprietary_id_space_1_events_ratio,
+                      options.profile_version_days, options.total_countries,
+                      options.regions_per_country, options.cities_per_region});
 
   return event;
 }

@@ -42,46 +42,6 @@ uint64_t int_pow(uint32_t base, uint32_t exp) {
   return result;
 }
 
-// The correspondence between the code and the string composed of lower case
-// letters is
-// code                                string
-// 1 - 26                              a - z
-// 26+1 - 26+26^2                      aa - zz
-// 26+26^2+1 - 26+26^2+26^3            aaa - zzz
-// ......
-// If we have
-// cut(n) = (26^n - 1) * 26 / 25
-// Then the correspondence will be
-// code                                string
-// cut(0)+1 - cut(1)                   a - z
-// cut(1)+1 - cut(2)                   aa - zz
-// cut(2)+1 - cut(3)                   aaa - zzz
-
-// Gets the cut code.
-uint64_t GetLowerLettersStringCodeCut(uint32_t n) {
-  return (int_pow(26, n) - 1) * 26 / 25;
-}
-
-// Converts the @code to a string composed of lower case letters.
-std::string ConvertToLowerLetters(uint64_t code) {
-  CHECK(code > 0) << "Code must be positive.";
-  uint32_t length = 1;
-  while (code > GetLowerLettersStringCodeCut(length)) {
-    ++length;
-    CHECK(length <= 13) << "Code is too large.";
-  }
-  code -= GetLowerLettersStringCodeCut(length - 1);
-  --code;
-  // Now the code is in range 0 - 26^length-1.
-  std::string output;
-  for (int i = 0; i < length; ++i) {
-    char c = 'a' + code % 26;
-    output = c + output;
-    code /= 26;
-  }
-  return output;
-}
-
 }  // namespace
 
 bool RandomGenerator::GetBool(const double true_chance) {
@@ -100,20 +60,24 @@ std::string RandomGenerator::GetDigits(const uint32_t length) {
 }
 
 std::string RandomGenerator::GetLowerLetters(const uint32_t length) {
-  CHECK(length <= 13) << "The max length is 13.";
-  uint64_t min = GetLowerLettersStringCodeCut(length - 1) + 1;
-  uint64_t max = GetLowerLettersStringCodeCut(length);
-  uint64_t random = absl::Uniform(absl::IntervalClosed, generator_, min, max);
-  return ConvertToLowerLetters(random);
+  std::string output(length, ' ');
+  for (int i = 0; i < length; ++i) {
+    output[i] = absl::Uniform<char>(absl::IntervalClosed, generator_, 'a', 'z');
+  }
+  return std::string(output);
 }
 
 std::string RandomGenerator::GetLowerLetters(const uint32_t length_min,
                                              const uint32_t length_max) {
-  CHECK(length_max <= 13) << "The max length is 13.";
-  uint64_t min = GetLowerLettersStringCodeCut(length_min - 1) + 1;
-  uint64_t max = GetLowerLettersStringCodeCut(length_max);
-  uint64_t random = absl::Uniform(absl::IntervalClosed, generator_, min, max);
-  return ConvertToLowerLetters(random);
+  CHECK(length_min <= length_max)
+      << "length_max cannot be less than length_min.";
+  double mean = (length_min + length_max + 1.0) / 2.0;
+  double stddev = (mean - length_min) / 3.0;
+  double random = absl::Gaussian(generator_, mean, stddev);
+  int32_t length = static_cast<int32_t>(random);
+  if (length < length_min) length = length_min;
+  if (length > length_max) length = length_max;
+  return GetLowerLetters(length);
 }
 
 int32_t RandomGenerator::GetInteger(const int32_t min, const int32_t max) {
@@ -124,16 +88,16 @@ int32_t RandomGenerator::GetInteger(const int32_t min, const int32_t max) {
 uint64_t RandomGenerator::GetTimestampUsecInNDays(
     const uint64_t current_timestamp, const uint32_t n) {
   CHECK(n <= 10000) << "N should be at most 10000.";
-  return absl::Uniform(
-      absl::IntervalClosed, generator_,
-      current_timestamp - n * kMicrosecPerDay, current_timestamp);
+  return absl::Uniform(absl::IntervalClosed, generator_,
+                       current_timestamp - n * kMicrosecPerDay,
+                       current_timestamp);
 }
 
 absl::CivilDay RandomGenerator::GetDateInNDays(absl::CivilDay current_date,
                                                const uint32_t n) {
   CHECK(n <= 10000) << "N should be at most 10000.";
-  uint32_t days = absl::Uniform(
-      absl::IntervalClosed, generator_, (uint32_t)0, n);
+  uint32_t days =
+      absl::Uniform(absl::IntervalClosed, generator_, (uint32_t)0, n);
   return current_date - days;
 }
 
@@ -157,8 +121,8 @@ double RandomGenerator::GetDoubleWithSeed(const double min, const double max,
                                           absl::string_view seed) const {
   CHECK(min <= max) << "max must be no less than min.";
   uint64_t fingerprint = util::Fingerprint64(seed);
-  double rate =
-      (double)fingerprint / (double)std::numeric_limits<uint64_t>::max();
+  double rate = static_cast<double>(fingerprint) /
+                static_cast<double>(std::numeric_limits<uint64_t>::max());
   return min + (max - min) * rate;
 }
 

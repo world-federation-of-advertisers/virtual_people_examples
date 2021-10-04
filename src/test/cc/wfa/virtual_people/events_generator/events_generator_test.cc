@@ -115,24 +115,23 @@ TEST(EventsGeneratorTest, SanityCheck) {
   uint32_t regions_per_country = 10;
   uint32_t cities_per_region = 10;
 
-  EventsGeneratorOptions events_generator_options({
-      current_timestamp,
-      /* total_publishers = */ 10,
-      total_events,
-      /* unknown_device_count = */ 100,
-      /* email_users_count = */ 100,
-      /* phone_users_count = */ 100,
-      /* proprietary_id_space_1_users_count = */ 100});
-  
-  EventOptions event_options({
-      /* unknown_device_ratio = */ 0.5,
-      total_countries,
-      regions_per_country,
-      cities_per_region,
-      /* email_events_ratio = */ 0.5,
-      /* phone_events_ratio = */ 0.5,
-      /* proprietary_id_space_1_events_ratio = */ 0.5,
-      /* profile_version_days = */ 1});
+  EventsGeneratorOptions events_generator_options = {
+      .current_timestamp = current_timestamp,
+      .total_publishers = 10,
+      .total_events = total_events,
+      .unknown_device_count = 100,
+      .email_users_count = 100,
+      .phone_users_count = 100,
+      .proprietary_id_space_1_users_count = 100};
+
+  EventOptions event_options({.unknown_device_ratio = 0.5,
+                              .total_countries = total_countries,
+                              .regions_per_country = regions_per_country,
+                              .cities_per_region = cities_per_region,
+                              .email_events_ratio = 0.5,
+                              .phone_events_ratio = 0.5,
+                              .proprietary_id_space_1_events_ratio = 0.5,
+                              .profile_version_days = 1});
 
   EventsGenerator generator(events_generator_options);
   for (int i = 0; i < total_events; i++) {

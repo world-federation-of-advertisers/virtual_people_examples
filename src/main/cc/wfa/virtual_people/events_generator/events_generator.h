@@ -103,7 +103,8 @@ struct ProfileInfoOptions {
 //   geo.country_id.
 // * geo.city_id is a 9-digit integer, and the first 6-digit is same as
 //   geo.region_id.
-// * profile_info.email_user_info.user_id is in format <PART1>@<PART2>.com,
+// * profile_info.email_user_info.user_id is in format
+//   <PART1>@<PART2>.example.com,
 //   while <PART1> is composed of 1 to 10 lower case letters, and <PART2> is
 //   composed of 4 to 8 lower case letters.
 // * profile_info.phone_user_info.user_id is composed of 10 digits.
