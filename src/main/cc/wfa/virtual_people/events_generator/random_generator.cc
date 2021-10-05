@@ -96,8 +96,8 @@ uint64_t RandomGenerator::GetTimestampUsecInNDays(
 absl::CivilDay RandomGenerator::GetDateInNDays(absl::CivilDay current_date,
                                                const uint32_t n) {
   CHECK(n <= 10000) << "N should be at most 10000.";
-  uint32_t days =
-      absl::Uniform(absl::IntervalClosed, generator_, (uint32_t)0, n);
+  uint32_t days = absl::Uniform(
+      absl::IntervalClosed, generator_, static_cast<uint32_t>(0), n);
   return current_date - days;
 }
 
