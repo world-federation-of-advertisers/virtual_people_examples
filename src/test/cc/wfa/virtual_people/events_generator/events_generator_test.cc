@@ -14,8 +14,8 @@
 
 #include "wfa/virtual_people/events_generator/events_generator.h"
 
-#include <string>
 #include <regex>
+#include <string>
 
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
@@ -33,6 +33,7 @@ using ::testing::Ge;
 using ::testing::Le;
 using ::testing::Matcher;
 using ::testing::MatchesRegex;
+using ::testing::Property;
 
 // 24 * 3600 * 1000
 constexpr uint64_t kMicrosecPerDay = 86400000;
@@ -52,104 +53,68 @@ Matcher<absl::string_view> IsValidUserAgent() {
   return AnyOf(MatchesRegex("[a-z]{10}"), MatchesRegex("[0-9]{1,2}"));
 }
 
-bool GeoSanityCheck(const GeoLocation& geo, const uint32_t total_countries,
-                    const uint32_t regions_per_country,
-                    const uint32_t cities_per_region) {
-  uint32_t country_id = geo.country_id();
-  uint32_t region_id = geo.region_id();
-  uint32_t city_id = geo.city_id();
-  if (country_id < 100 || country_id > 99 + total_countries) {
-    return false;
+MATCHER_P3(IsValidGeo, total_countries, regions_per_country, cities_per_region,
+           "") {
+  uint32_t country_id = arg.country_id();
+  uint32_t region_id = arg.region_id();
+  return ExplainMatchResult(
+      AllOf(Property("country_id", &GeoLocation::country_id,
+                     AllOf(Ge(100), Le(99 + total_countries))),
+            Property("region_id", &GeoLocation::region_id,
+                     AllOf(Ge(country_id * 1000),
+                           Le(country_id * 1000 + regions_per_country - 1))),
+            Property("city_id", &GeoLocation::city_id,
+                     AllOf(Ge(region_id * 1000),
+                           Le(region_id * 1000 + cities_per_region - 1)))),
+      arg, result_listener);
+}
+
+MATCHER_P4(IsValidUserInfo, user_id_regex, total_countries, regions_per_country,
+           cities_per_region, "") {
+  return ExplainMatchResult(
+      AllOf(
+          Property("user_id", &UserInfo::user_id, MatchesRegex(user_id_regex)),
+          Property("profile_version", &UserInfo::profile_version,
+                   MatchesRegex("[0-9]{4}-[0-9]{2}-[0-9]{2}")),
+          Property(
+              "demo", &UserInfo::demo,
+              Property("demo_bucket", &DemoInfo::demo_bucket,
+                       Property("age", &DemoBucket::age,
+                                AllOf(Property("min_age", &AgeRange::min_age,
+                                               AllOf(Ge(0), Le(120))),
+                                      Property("max_age", &AgeRange::max_age,
+                                               AnyOf(AllOf(Ge(0), Le(120)),
+                                                     Eq(1000))))))),
+          Property("demo", &UserInfo::demo,
+                   Property("confidence", &DemoInfo::confidence,
+                            AllOf(Ge(0.0), Le(1.0)))),
+          Property("home_geo", &UserInfo::home_geo,
+                   IsValidGeo(total_countries, regions_per_country,
+                              cities_per_region))),
+      arg, result_listener);
+}
+
+MATCHER_P3(IsValidProfileInfo, total_countries, regions_per_country,
+           cities_per_region, "") {
+  if (arg.has_email_user_info()) {
+    return ExplainMatchResult(
+        IsValidUserInfo("[a-z]{1,10}@[a-z]{4,8}\\.example.com", total_countries,
+                        regions_per_country, cities_per_region),
+        arg.email_user_info(), result_listener);
   }
-  if (region_id < country_id * 1000 ||
-      region_id > country_id * 1000 + regions_per_country - 1) {
-    return false;
+  if (arg.has_phone_user_info()) {
+    return ExplainMatchResult(
+        IsValidUserInfo("\\+\\(555\\)[0-9]{3}-[0-9]{4}", total_countries,
+                        regions_per_country, cities_per_region),
+        arg.phone_user_info(), result_listener);
   }
-  if (city_id < region_id * 1000 ||
-      city_id > region_id * 1000 + cities_per_region - 1) {
-    return false;
+  if (arg.has_proprietary_id_space_1_user_info()) {
+    return ExplainMatchResult(
+        IsValidUserInfo("[0-9]{16}", total_countries, regions_per_country,
+                        cities_per_region),
+        arg.proprietary_id_space_1_user_info(), result_listener);
   }
   return true;
-}
-
-MATCHER_P3(
-    IsValidGeo, total_countries, regions_per_country, cities_per_region, "") {
-  return GeoSanityCheck(
-      arg, total_countries, regions_per_country, cities_per_region);
-}
-
-bool UserInfoSanityCheck(const UserInfo& user_info,
-                         const uint32_t total_countries,
-                         const uint32_t regions_per_country,
-                         const uint32_t cities_per_region) {
-  if (!std::regex_match(user_info.profile_version(),
-                        std::regex("[0-9]{4}-[0-9]{2}-[0-9]{2}"))) {
-    return false;
-  }
-  uint32_t min_age = user_info.demo().demo_bucket().age().min_age();
-  if (min_age < 0 || min_age > 120) {
-    return false;
-  }
-  uint32_t max_age = user_info.demo().demo_bucket().age().max_age();
-  if ((max_age < 0 || max_age > 120) && max_age != 1000) {
-    return false;
-  }
-  double confidence = user_info.demo().confidence();
-  if (confidence < 0.0 || confidence > 1.0) {
-    return false;
-  }
-  if (!GeoSanityCheck(
-      user_info.home_geo(),
-      total_countries, regions_per_country, cities_per_region)) {
-    return false;
-  }
-  return true;
-}
-
-bool ProfileInfoSanityCheck(const ProfileInfo& profile_info,
-                            const uint32_t total_countries,
-                            const uint32_t regions_per_country,
-                            const uint32_t cities_per_region) {
-  if (profile_info.has_email_user_info()) {
-    if (!std::regex_match(profile_info.email_user_info().user_id(),
-                          std::regex("[a-z]{1,10}@[a-z]{4,8}\\.example.com"))) {
-      return false;
-    }
-    if (!UserInfoSanityCheck(profile_info.email_user_info(), total_countries,
-                             regions_per_country, cities_per_region)) {
-      return false;
-    }
-  }
-  if (profile_info.has_phone_user_info()) {
-    if (!std::regex_match(profile_info.phone_user_info().user_id(),
-                          std::regex("\\+\\(555\\)[0-9]{3}-[0-9]{4}"))) {
-      return false;
-    }
-    if (!UserInfoSanityCheck(profile_info.phone_user_info(), total_countries,
-                             regions_per_country, cities_per_region)) {
-      return false;
-    }
-  }
-  if (profile_info.has_proprietary_id_space_1_user_info()) {
-    if (!std::regex_match(
-        profile_info.proprietary_id_space_1_user_info().user_id(),
-        std::regex("[0-9]{16}"))) {
-      return false;
-    }
-    if (!UserInfoSanityCheck(
-        profile_info.proprietary_id_space_1_user_info(),
-        total_countries, regions_per_country, cities_per_region)) {
-      return false;
-    }
-  }
-  return true;
-}
-
-MATCHER_P3(
-    IsValidProfileInfo, total_countries, regions_per_country, cities_per_region,
-    "") {
-  return ProfileInfoSanityCheck(
-      arg, total_countries, regions_per_country, cities_per_region);
 }
 
 TEST(EventsGeneratorTest, SanityCheck) {
@@ -180,8 +145,8 @@ TEST(EventsGeneratorTest, SanityCheck) {
   EventsGenerator generator(events_generator_options);
   for (int i = 0; i < total_events; i++) {
     DataProviderEvent event = generator.GetEvents(event_options);
-    SCOPED_TRACE(absl::StrCat(
-        "Index: ", i, "\n", "Event: ", event.DebugString()));
+    SCOPED_TRACE(
+        absl::StrCat("Index: ", i, "\n", "Event: ", event.DebugString()));
     const LabelerInput& labeler_input = event.log_event().labeler_input();
     EXPECT_THAT(labeler_input.event_id().publisher(), IsValidPublisher());
     EXPECT_THAT(labeler_input.event_id().id(), IsValidId());
@@ -191,10 +156,9 @@ TEST(EventsGeneratorTest, SanityCheck) {
     EXPECT_THAT(
         labeler_input.geo(),
         IsValidGeo(total_countries, regions_per_country, cities_per_region));
-    EXPECT_THAT(
-        labeler_input.profile_info(),
-        IsValidProfileInfo(
-            total_countries, regions_per_country, cities_per_region));
+    EXPECT_THAT(labeler_input.profile_info(),
+                IsValidProfileInfo(total_countries, regions_per_country,
+                                   cities_per_region));
   }
 }
 
