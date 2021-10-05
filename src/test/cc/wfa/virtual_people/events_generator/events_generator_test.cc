@@ -29,29 +29,25 @@ using ::testing::AnyOf;
 using ::testing::Eq;
 using ::testing::Ge;
 using ::testing::Le;
+using ::testing::Matcher;
 using ::testing::MatchesRegex;
 
 // 24 * 3600 * 1000
 constexpr uint64_t kMicrosecPerDay = 86400000;
 
-void PublisherSanityCheck(absl::string_view publisher) {
-  EXPECT_THAT(publisher, MatchesRegex("[0-9]{8}"));
+Matcher<absl::string_view> IsValidPublisher() {
+  return MatchesRegex("[0-9]{8}");
 }
 
-void IdSanityCheck(absl::string_view id) {
-  EXPECT_THAT(id, MatchesRegex("[0-9]{16}"));
+Matcher<absl::string_view> IsValidId() { return MatchesRegex("[0-9]{16}"); }
+
+Matcher<int64_t> IsValidTimestampUsec(const int64_t current_timestamp) {
+  return AllOf(Ge(current_timestamp - 30 * kMicrosecPerDay),
+               Le(current_timestamp));
 }
 
-void TimestampUsecSanityCheck(const int64_t timestamp_usec,
-                              const int64_t current_timestamp) {
-  EXPECT_THAT(timestamp_usec,
-              AllOf(Ge(current_timestamp - 30 * kMicrosecPerDay),
-                    Le(current_timestamp)));
-}
-
-void UserAgentSanityCheck(absl::string_view user_agent) {
-  EXPECT_THAT(user_agent,
-              AnyOf(MatchesRegex("[a-z]{10}"), MatchesRegex("[0-9]{1,2}")));
+Matcher<absl::string_view> IsValidUserAgent() {
+  return AnyOf(MatchesRegex("[a-z]{10}"), MatchesRegex("[0-9]{1,2}"));
 }
 
 void GeoSanityCheck(const GeoLocation& geo, const uint32_t total_countries,
@@ -137,10 +133,11 @@ TEST(EventsGeneratorTest, SanityCheck) {
   for (int i = 0; i < total_events; i++) {
     DataProviderEvent event = generator.GetEvents(event_options);
     const LabelerInput& labeler_input = event.log_event().labeler_input();
-    PublisherSanityCheck(labeler_input.event_id().publisher());
-    IdSanityCheck(labeler_input.event_id().id());
-    TimestampUsecSanityCheck(labeler_input.timestamp_usec(), current_timestamp);
-    UserAgentSanityCheck(labeler_input.user_agent());
+    EXPECT_THAT(labeler_input.event_id().publisher(), IsValidPublisher());
+    EXPECT_THAT(labeler_input.event_id().id(), IsValidId());
+    EXPECT_THAT(labeler_input.timestamp_usec(),
+                IsValidTimestampUsec(current_timestamp));
+    EXPECT_THAT(labeler_input.user_agent(), IsValidUserAgent());
     GeoSanityCheck(labeler_input.geo(), total_countries, regions_per_country,
                    cities_per_region);
     ProfileInfoSanityCheck(labeler_input.profile_info(), total_countries,
