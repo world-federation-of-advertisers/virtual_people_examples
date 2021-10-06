@@ -138,14 +138,14 @@ TEST(EventsGeneratorTest, SanityCheck) {
       .phone_users_count = 100,
       .proprietary_id_space_1_users_count = 100};
 
-  EventOptions event_options({.unknown_device_ratio = 0.5,
-                              .total_countries = total_countries,
-                              .regions_per_country = regions_per_country,
-                              .cities_per_region = cities_per_region,
-                              .email_events_ratio = 0.5,
-                              .phone_events_ratio = 0.5,
-                              .proprietary_id_space_1_events_ratio = 0.5,
-                              .profile_version_days = 1});
+  EventOptions event_options = {.unknown_device_ratio = 0.5,
+                                .total_countries = total_countries,
+                                .regions_per_country = regions_per_country,
+                                .cities_per_region = cities_per_region,
+                                .email_events_ratio = 0.5,
+                                .phone_events_ratio = 0.5,
+                                .proprietary_id_space_1_events_ratio = 0.5,
+                                .profile_version_days = 1};
 
   EventsGenerator generator(events_generator_options);
   for (int i = 0; i < total_events; i++) {
