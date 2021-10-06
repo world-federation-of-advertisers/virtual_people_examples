@@ -38,6 +38,10 @@ using ::testing::Property;
 // 24 * 3600 * 1000
 constexpr uint64_t kMicrosecPerDay = 86400000;
 
+MATCHER_P2(IsBetween, low, high, "") {
+  return ExplainMatchResult(AllOf(Ge(low), Le(high)), arg, result_listener);
+}
+
 Matcher<absl::string_view> IsValidPublisher() {
   return MatchesRegex("[0-9]{8}");
 }
@@ -45,8 +49,7 @@ Matcher<absl::string_view> IsValidPublisher() {
 Matcher<absl::string_view> IsValidId() { return MatchesRegex("[0-9]{16}"); }
 
 Matcher<int64_t> IsValidTimestampUsec(const int64_t current_timestamp) {
-  return AllOf(Ge(current_timestamp - 30 * kMicrosecPerDay),
-               Le(current_timestamp));
+  return IsBetween(current_timestamp - 30 * kMicrosecPerDay, current_timestamp);
 }
 
 Matcher<absl::string_view> IsValidUserAgent() {
@@ -59,13 +62,26 @@ MATCHER_P3(IsValidGeo, total_countries, regions_per_country, cities_per_region,
   uint32_t region_id = arg.region_id();
   return ExplainMatchResult(
       AllOf(Property("country_id", &GeoLocation::country_id,
-                     AllOf(Ge(100), Le(99 + total_countries))),
+                     IsBetween(100, 99 + total_countries)),
             Property("region_id", &GeoLocation::region_id,
-                     AllOf(Ge(country_id * 1000),
-                           Le(country_id * 1000 + regions_per_country - 1))),
+                     IsBetween(country_id * 1000,
+                               country_id * 1000 + regions_per_country - 1)),
             Property("city_id", &GeoLocation::city_id,
-                     AllOf(Ge(region_id * 1000),
-                           Le(region_id * 1000 + cities_per_region - 1)))),
+                     IsBetween(region_id * 1000,
+                               region_id * 1000 + cities_per_region - 1))),
+      arg, result_listener);
+}
+
+MATCHER(IsValidDemo, "") {
+  return ExplainMatchResult(
+      AllOf(Property(
+                "demo_bucket", &DemoInfo::demo_bucket,
+                Property("age", &DemoBucket::age,
+                         AllOf(Property("min_age", &AgeRange::min_age,
+                                        IsBetween(0, 120)),
+                               Property("max_age", &AgeRange::max_age,
+                                        AnyOf(IsBetween(0, 120), Eq(1000)))))),
+            Property("confidence", &DemoInfo::confidence, IsBetween(0.0, 1.0))),
       arg, result_listener);
 }
 
@@ -76,18 +92,7 @@ MATCHER_P4(IsValidUserInfo, user_id_regex, total_countries, regions_per_country,
           Property("user_id", &UserInfo::user_id, MatchesRegex(user_id_regex)),
           Property("profile_version", &UserInfo::profile_version,
                    MatchesRegex("[0-9]{4}-[0-9]{2}-[0-9]{2}")),
-          Property(
-              "demo", &UserInfo::demo,
-              Property("demo_bucket", &DemoInfo::demo_bucket,
-                       Property("age", &DemoBucket::age,
-                                AllOf(Property("min_age", &AgeRange::min_age,
-                                               AllOf(Ge(0), Le(120))),
-                                      Property("max_age", &AgeRange::max_age,
-                                               AnyOf(AllOf(Ge(0), Le(120)),
-                                                     Eq(1000))))))),
-          Property("demo", &UserInfo::demo,
-                   Property("confidence", &DemoInfo::confidence,
-                            AllOf(Ge(0.0), Le(1.0)))),
+          Property("demo", &UserInfo::demo, IsValidDemo()),
           Property("home_geo", &UserInfo::home_geo,
                    IsValidGeo(total_countries, regions_per_country,
                               cities_per_region))),
