@@ -47,6 +47,7 @@ class RandomGenerator {
   std::string GetLowerLetters(uint32_t length);
   // Generates a string composed of lower case letters with length between
   // @length_min and @length_max inclusively.
+  // The length is selected randomly with Gaussian distribution.
   std::string GetLowerLetters(uint32_t length_min, uint32_t length_max);
   // Generates an integer with value between @min and @max inclusively.
   int32_t GetInteger(int32_t min, int32_t max);
