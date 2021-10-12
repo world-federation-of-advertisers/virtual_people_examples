@@ -16,9 +16,9 @@ syntax = "proto3";
 
 package wfa_virtual_people;
 
-import "src/main/proto/wfa/virtual_people/common/event.proto";
-import "src/main/proto/wfa/virtual_people/common/label.proto";
-import "src/main/proto/wfa/virtual_people/common/model.proto";
+import "wfa/virtual_people/common/event.proto";
+import "wfa/virtual_people/common/label.proto";
+import "wfa/virtual_people/common/model.proto";
 
 message LabelerInputList {
   repeated LabelerInput inputs = 1;
