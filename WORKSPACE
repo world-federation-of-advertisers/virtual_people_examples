@@ -3,9 +3,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Common-cpp
 http_archive(
     name = "wfa_common_cpp",
-    sha256 = "aedf667f2b2a42afa251ce5f0032fe6fbc4298ae9a389872ed43deb1e607ac2d",
-    strip_prefix = "common-cpp-0.4.1",
-    url = "https://github.com/world-federation-of-advertisers/common-cpp/archive/refs/tags/v0.4.1.tar.gz",
+    sha256 = "e8efc0c9f5950aff13a59f21f40ccc31c26fe40c800743f824f92df3a05588b2",
+    strip_prefix = "common-cpp-0.5.0",
+    url = "https://github.com/world-federation-of-advertisers/common-cpp/archive/refs/tags/v0.5.0.tar.gz",
 )
 
 load("@wfa_common_cpp//build:common_cpp_repositories.bzl", "common_cpp_repositories")
@@ -29,6 +29,6 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 # Virtual-people-core-serving
 git_repository(
     name = "virtual_people_core_serving",
-    remote = "https://github.com/world-federation-of-advertisers/virtual-people-core-serving",
     commit = "5043e4658cfddadc47aa46f9fe555b364a2fbda1",
+    remote = "https://github.com/world-federation-of-advertisers/virtual-people-core-serving",
 )

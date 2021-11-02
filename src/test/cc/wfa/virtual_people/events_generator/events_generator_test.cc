@@ -149,7 +149,7 @@ TEST(EventsGeneratorTest, SanityCheck) {
 
   EventsGenerator generator(events_generator_options);
   for (int i = 0; i < total_events; i++) {
-    DataProviderEvent event = generator.GetEvents(event_options);
+    DataProviderEvent event = generator.GetEvent(event_options);
     SCOPED_TRACE(
         absl::StrCat("Index: ", i, "\n", "Event: ", event.DebugString()));
     const LabelerInput& labeler_input = event.log_event().labeler_input();

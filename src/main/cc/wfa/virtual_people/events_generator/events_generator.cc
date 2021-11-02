@@ -342,7 +342,7 @@ ProfileInfo EventsGenerator::GetProfileInfo(const ProfileInfoOptions& options) {
   return profile_info;
 }
 
-DataProviderEvent EventsGenerator::GetEvents(const EventOptions& options) {
+DataProviderEvent EventsGenerator::GetEvent(const EventOptions& options) {
   DataProviderEvent event;
   LabelerInput* labeler_input =
       event.mutable_log_event()->mutable_labeler_input();
