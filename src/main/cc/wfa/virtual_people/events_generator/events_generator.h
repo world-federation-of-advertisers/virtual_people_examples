@@ -136,7 +136,7 @@ class EventsGenerator {
 
   // Generates a random DataProviderEvent. Only fields in
   // log_event.labeler_input are set.
-  DataProviderEvent GetEvents(const EventOptions& options);
+  DataProviderEvent GetEvent(const EventOptions& options);
 
  private:
   void BuildEventIdPool(uint32_t total_publishers, uint32_t total_events);
