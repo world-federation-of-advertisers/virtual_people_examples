@@ -23,12 +23,17 @@
 #include <fcntl.h>
 
 #include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <ostream>
 #include <string>
 
 #include "absl/flags/flag.h"
 #include "absl/flags/parse.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
+#include "common_cpp/protobuf_util/textproto_io.h"
 #include "glog/logging.h"
 #include "google/protobuf/io/zero_copy_stream_impl.h"
 #include "google/protobuf/message.h"
@@ -64,17 +69,20 @@ ABSL_FLAG(uint32_t, profile_version_days, 1,
           "[today - profile_version_days, today].");
 ABSL_FLAG(std::string, output_dir, "",
           "Path to directory to output the events.");
+ABSL_FLAG(bool, textproto, true, "If true, writes textproto files");
+ABSL_FLAG(bool, binary, false, "If true, writes binary proto files");
 
-// Write textproto to file
-void WriteTextProtoFile(absl::string_view path,
-                        const google::protobuf::Message& message) {
-  // The output file is only accessible by owner.
-  int fd = open(path.data(), O_CREAT | O_WRONLY, S_IRWXU);
-  CHECK(fd > 0) << "Unable to create file: " << path;
-  google::protobuf::io::FileOutputStream file_output(fd);
-  file_output.SetCloseOnDelete(true);
-  CHECK(google::protobuf::TextFormat::Print(message, &file_output))
-      << "Unable to write textproto file: " << path;
+absl::Status WriteBinaryProtoFile(absl::string_view filename,
+                                  const google::protobuf::Message& message) {
+  int fd = open(filename.data(), O_CREAT | O_WRONLY, S_IRWXU);
+  google::protobuf::io::FileOutputStream output(fd);
+  output.SetCloseOnDelete(true);
+
+  if (!message.SerializeToZeroCopyStream(&output)) {
+    return absl::InternalError("Unable to serialize");
+  }
+
+  return absl::OkStatus();
 }
 
 int main(int argc, char** argv) {
@@ -83,6 +91,9 @@ int main(int argc, char** argv) {
 
   std::string output_dir = absl::GetFlag(FLAGS_output_dir);
   CHECK(!output_dir.empty()) << "output_dir is not set.";
+
+  CHECK(absl::GetFlag(FLAGS_textproto) || absl::GetFlag(FLAGS_binary))
+      << "At least one of --textproto and --binary is required";
 
   wfa_virtual_people::EventsGeneratorOptions event_generator_options = {
       .current_timestamp =
@@ -108,11 +119,23 @@ int main(int argc, char** argv) {
 
   wfa_virtual_people::EventsGenerator generator(event_generator_options);
 
-  for (int i = 0; i < absl::GetFlag(FLAGS_total_events); i++) {
+  for (int i = 0; i < absl::GetFlag(FLAGS_total_events); ++i) {
     wfa_virtual_people::DataProviderEvent event =
-        generator.GetEvents(event_options);
-    WriteTextProtoFile(absl::StrCat(output_dir, "/event_", i + 1, ".textproto"),
-                       event);
+        generator.GetEvent(event_options);
+
+    std::string prefix = absl::StrCat(output_dir, "/event-", i + 1);
+
+    if (absl::GetFlag(FLAGS_textproto)) {
+      std::string filename = absl::StrCat(prefix, ".textproto");
+      absl::Status status = wfa::WriteTextProtoFile(filename, event);
+      CHECK(status.ok()) << status;
+    }
+
+    if (absl::GetFlag(FLAGS_binary)) {
+      std::string filename = absl::StrCat(prefix, ".pb");
+      absl::Status status = WriteBinaryProtoFile(filename, event);
+      CHECK(status.ok()) << status;
+    }
   }
 
   return 0;
