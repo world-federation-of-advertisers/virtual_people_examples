@@ -3,9 +3,12 @@ load("@rules_proto//proto:defs.bzl", "proto_library")
 
 package(default_visibility = ["//visibility:private"])
 
+_IMPORT_PREFIX = "/src/main/cc"
+
 proto_library(
     name = "model_applier_proto",
     srcs = ["model_applier.proto"],
+    strip_import_prefix = _IMPORT_PREFIX,
     deps = [
         "@virtual_people_common//src/main/proto/wfa/virtual_people/common:event_proto",
         "@virtual_people_common//src/main/proto/wfa/virtual_people/common:label_proto",

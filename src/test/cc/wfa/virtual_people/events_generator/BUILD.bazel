@@ -1,0 +1,23 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
+package(default_visibility = ["//visibility:private"])
+
+cc_test(
+    name = "random_generator_test",
+    srcs = ["random_generator_test.cc"],
+    deps = [
+        "//src/main/cc/wfa/virtual_people/events_generator:random_generator",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "events_generator_test",
+    srcs = ["events_generator_test.cc"],
+    deps = [
+        "//src/main/cc/wfa/virtual_people/events_generator:events_generator",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@virtual_people_common//src/main/proto/wfa/virtual_people/common:event_cc_proto",
+    ],
+)
