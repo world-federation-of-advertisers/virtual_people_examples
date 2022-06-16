@@ -1,0 +1,25 @@
+name: Integration Test
+
+on:
+  # Should the integration tests only trigger when pushed or pulled to main?
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches: 
+      - main
+    types: [opened, synchronize, edited]
+
+jobs:
+  integration_test:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out
+        uses: actions/checkout@v3
+
+      - name: Integration Test Script
+        run: |
+          chmod +x ./.github/integration_test.sh
+          ./.github/integration_test.sh
+        shell: bash
