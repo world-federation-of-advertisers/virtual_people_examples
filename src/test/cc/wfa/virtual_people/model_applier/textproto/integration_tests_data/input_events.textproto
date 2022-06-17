@@ -1,16 +1,24 @@
+# all creation_time_usec are set as Jan 1, 2022 12:00:00 AM
+# cookieless_pool-GB
 inputs {
-    event_id {
-        publisher: "PUBLISHER_01"
-        id: "EVENT_01"
+    geo {
+        country_id: 1
     }
-    timestamp_usec: 1626847100000001
+}
+# cookieless_pool-US
+inputs {
+    geo {
+        country_id: 2
+    }
+}
+# cookied_pool-GB-phone-Demo Bucket - F18-24
+inputs {
     geo {
         country_id: 1
     }
     profile_info {
         phone_user_info {
-            user_id: "PHONE_USER_01"
-            profile_version: "20210701"
+            user_id: "GENERIC_ID"
             demo {
                 demo_bucket {
                     gender: GENDER_FEMALE
@@ -20,7 +28,490 @@ inputs {
                     }
                 }
             }
-            creation_time_usec: 1626847100001001
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-phone-Demo Bucket - F25-34
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 25
+                        max_age: 34
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-phone-Demo Bucket - F35-99
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 35
+                        max_age: 99
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-phone-Demo Bucket - M18-24
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 18
+                        max_age: 24
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-phone-Demo Bucket - M25-34
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 25
+                        max_age: 34
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-phone-Demo Bucket - M35-99
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 35
+                        max_age: 99
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-email-Demo Bucket - F18-24
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 18
+                        max_age: 24
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-email-Demo Bucket - F25-34
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 25
+                        max_age: 34
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-email-Demo Bucket - F35-99
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 35
+                        max_age: 99
+                    }
+                } 
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-email-Demo Bucket - M18-24
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 18
+                        max_age: 24
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-email-Demo Bucket - M25-34
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 25
+                        max_age: 34
+                    }   
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-GB-email-Demo Bucket - M35-99
+inputs {
+    geo {
+        country_id: 1
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 35
+                        max_age: 99
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-phone-Demo Bucket - F18-24
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 18
+                        max_age: 24
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-phone-Demo Bucket - F25-34
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 25
+                        max_age: 34
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-phone-Demo Bucket - F35-99
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 35
+                        max_age: 99
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-phone-Demo Bucket - M18-24
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 18
+                        max_age: 24
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-phone-Demo Bucket - M25-34
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 25
+                        max_age: 34
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-phone-Demo Bucket - M35-99
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        phone_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 35
+                        max_age: 99
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-email-Demo Bucket - F18-24
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 18
+                        max_age: 24
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-email-Demo Bucket - F25-34
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 25
+                        max_age: 34
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-email-Demo Bucket - F35-99
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_FEMALE
+                    age {
+                        min_age: 35
+                        max_age: 99
+                    }
+                } 
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-email-Demo Bucket - M18-24
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 18
+                        max_age: 24
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-email-Demo Bucket - M25-34
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 25
+                        max_age: 34
+                    }   
+                }
+            }
+            creation_time_usec: 1640995200
+        }
+    }
+}
+# cookied_pool-US-email-Demo Bucket - M35-99
+inputs {
+    geo {
+        country_id: 2
+    }
+    profile_info {
+        email_user_info {
+            user_id: "GENERIC_ID"
+            demo {
+                demo_bucket {
+                    gender: GENDER_MALE
+                    age {
+                        min_age: 35
+                        max_age: 99
+                    }
+                }
+            }
+            creation_time_usec: 1640995200
         }
     }
 }
