@@ -34,5 +34,6 @@ cc_binary(
         "@com_google_protobuf//:protobuf",
         "@virtual_people_common//src/main/proto/wfa/virtual_people/common:model_cc_proto",
         "@virtual_people_core_serving//src/main/cc/wfa/virtual_people/core/labeler",
+        "@wfa_common_cpp//src/main/cc/common_cpp/protobuf_util:riegeli_io",
     ],
 )
