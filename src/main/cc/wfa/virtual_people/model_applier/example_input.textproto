@@ -1,0 +1,263 @@
+# Example: a list of input events.
+# Two events each for user_id 1/2/3/4/5
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_01"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_1"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_02"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_2"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_03"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_3"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_04"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_4"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_05"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_5"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_06"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_1"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_07"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_2"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_08"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_3"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_09"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_4"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+inputs {
+  event_id {
+    publisher: "PUBLISHER_01"
+    id: "EVENT_10"
+  }
+  timestamp_usec: 1626847100000001
+  geo {
+    city_id: 1
+  }
+  device_type: "MOBILE"
+  profile_info {
+    logged_in_id_user_info {
+      user_id: "in_5"
+      demo {
+        demo_bucket {
+          gender: GENDER_FEMALE
+          age {
+            min_age: 18
+            max_age: 24
+          }
+        }
+      }
+      creation_time_usec: 1626847100001001
+    }
+  }
+}
+

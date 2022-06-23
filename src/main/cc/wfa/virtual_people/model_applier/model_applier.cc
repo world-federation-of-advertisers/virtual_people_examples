@@ -14,18 +14,25 @@
 
 // This is a tool to apply Virtual People Labeler to a set of input events,
 // and write the output virtual people and aggregated reach report.
+//
 // Example usage:
-// To applie the model represented by root node
-//   bazel build -c opt //src/main/cc/wfa/virtual_people/model_applier
-//   bazel-bin/src/main/cc/wfa/virtual_people/model_applier/model_applier \
-//   --model_node_path=/tmp/model_applier/model_node.txt \
-//   --input_path=/tmp/model_applier/input_events.txt \
+//
+// To apply a model represented by root node
+//   bazel run -c opt //src/main/cc/wfa/virtual_people/model_applier -- \
+//   --model_node_path=/tmp/model_applier/model.textproto \
+//   --input_path=/tmp/model_applier/example_input.textproto \
 //   --output_dir=/tmp/model_applier
-// To applie the model represented by a list of nodes
-//   bazel build -c opt //src/main/cc/wfa/virtual_people/model_applier
-//   bazel-bin/src/main/cc/wfa/virtual_people/model_applier/model_applier \
-//   --model_nodes_path=/tmp/model_applier/model_nodes \
-//   --input_path=/tmp/model_applier/input_events \
+//
+// To apply a model represented by a list of nodes in textproto
+//   bazel run -c opt //src/main/cc/wfa/virtual_people/model_applier -- \
+//   --model_nodes_path=/tmp/model_applier/model_nodes.textproto \
+//   --input_path=/tmp/model_applier/example_input.textproto \
+//   --output_dir=/tmp/model_applier
+//
+// To apply a model represented in Riegeli format
+//   bazel run -c opt //src/main/cc/wfa/virtual_people/model_applier -- \
+//   --model_riegeli_path=/tmp/model_applier/model_riegeli \
+//   --input_path=/tmp/model_applier/example_input.textproto \
 //   --output_dir=/tmp/model_applier
 
 #include <fcntl.h>
@@ -36,6 +43,7 @@
 #include "absl/container/flat_hash_set.h"
 #include "absl/flags/flag.h"
 #include "absl/flags/parse.h"
+#include "common_cpp/protobuf_util/riegeli_io.h"
 #include "glog/logging.h"
 #include "google/protobuf/io/zero_copy_stream_impl.h"
 #include "google/protobuf/message.h"
@@ -48,13 +56,21 @@ ABSL_FLAG(std::string, model_node_path, "",
           "Path to the virtual people model file, contains textproto of "
           "CompiledNode. This represents the root node of the model tree, and "
           "all nodes in the model tree are referenced by CompiledNode "
-          "directly. At least one of model_node_path and model_nodes_path must "
-          "be set.");
+          "directly. "
+          "At least one of [model_node_path, model_nodes_path, "
+          "model_riegeli_path] must be set.");
 ABSL_FLAG(std::string, model_nodes_path, "",
           "Path to the virtual people model file, contains textproto of "
           "CompiledNodeList. Nodes in the model tree are allowed to be "
-          "referenced by indexes. At least one of model_node_path and "
-          "model_nodes_path must be set.");
+          "referenced by indexes. "
+          "At least one of [model_node_path, model_nodes_path, "
+          "model_riegeli_path] must be set.");
+ABSL_FLAG(std::string, model_riegeli_path, "",
+          "Path to the virtual people model file, contains a list of "
+          "CompiledNode using Riegeli format. Nodes in the model tree are "
+          "allowed to be referenced by indexes. "
+          "At least one of [model_node_path, model_nodes_path, "
+          "model_riegeli_path] must be set.");
 ABSL_FLAG(std::string, input_path, "",
           "Path to the input events, contains textproto of LabelerInputList.");
 ABSL_FLAG(std::string, output_dir, "", "Path to the output directory.");
@@ -92,13 +108,16 @@ void WriteTextProtoFile(absl::string_view path,
 // in CompiledNode textproto.
 // If model_nodes_path is set, the model is represented as a list of nodes, in
 // CompiledNodeList textproto.
+// If model_riegeli_path is set, the model is represented as a list of nodes,
+// in Riegeli format.
 std::unique_ptr<Labeler> GetLabeler(absl::string_view model_node_path,
-                                    absl::string_view model_nodes_path) {
+                                    absl::string_view model_nodes_path,
+                                    absl::string_view model_riegeli_path) {
   if (!model_node_path.empty()) {
     CompiledNode root;
     ReadTextProtoFile(model_node_path, root);
     absl::StatusOr<std::unique_ptr<Labeler>> labeler = Labeler::Build(root);
-    CHECK(labeler.ok()) << "Creating Labler failed with status: "
+    CHECK(labeler.ok()) << "Creating Labeler failed with status: "
                         << labeler.status();
     return *std::move(labeler);
   }
@@ -108,11 +127,22 @@ std::unique_ptr<Labeler> GetLabeler(absl::string_view model_node_path,
     std::vector<CompiledNode> nodes(node_list.nodes().begin(),
                                     node_list.nodes().end());
     absl::StatusOr<std::unique_ptr<Labeler>> labeler = Labeler::Build(nodes);
-    CHECK(labeler.ok()) << "Creating Labler failed with status: "
+    CHECK(labeler.ok()) << "Creating Labeler failed with status: "
                         << labeler.status();
     return *std::move(labeler);
   }
-  LOG(FATAL) << "Neither model_node_path nor model_nodes_path is set.";
+  if (!model_riegeli_path.empty()) {
+    std::vector<CompiledNode> nodes;
+    absl::Status read_status = wfa::ReadRiegeliFile(model_riegeli_path, nodes);
+    CHECK(read_status.ok())
+        << "ReadRiegeliFile failed with status: " << read_status;
+    absl::StatusOr<std::unique_ptr<Labeler>> labeler = Labeler::Build(nodes);
+    CHECK(labeler.ok()) << "Creating Labeler failed with status: "
+                        << labeler.status();
+    return *std::move(labeler);
+  }
+  LOG(FATAL) << "None of [model_node_path, model_nodes_path, "
+                "model_riegeli_path] is set.";
 }
 
 // Read a list of input events, in LabelerInputList textproto.
@@ -216,7 +246,8 @@ int main(int argc, char** argv) {
 
   std::unique_ptr<wfa_virtual_people::Labeler> labeler =
       wfa_virtual_people::GetLabeler(absl::GetFlag(FLAGS_model_node_path),
-                                     absl::GetFlag(FLAGS_model_nodes_path));
+                                     absl::GetFlag(FLAGS_model_nodes_path),
+                                     absl::GetFlag(FLAGS_model_riegeli_path));
 
   wfa_virtual_people::LabelerInputList labeler_inputs =
       wfa_virtual_people::GetInputEvents(absl::GetFlag(FLAGS_input_path));
