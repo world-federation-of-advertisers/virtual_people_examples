@@ -1,0 +1,14 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
+package(default_visibility = ["//visibility:private"])
+
+cc_test(
+    name = "model_applier_test",
+    srcs = ["model_applier_test.cc"],
+    data = ["//src/main/cc/wfa/virtual_people/model_applier:model_applier"],
+    deps = [
+        "//src/main/cc/wfa/virtual_people/model_applier:model_applier",
+        "@bazel_tools//tools/cpp/runfiles",
+        "@com_google_googletest//:gtest_main"
+    ]
+)
