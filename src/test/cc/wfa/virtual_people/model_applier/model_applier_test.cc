@@ -20,38 +20,16 @@
 #include <array>
 
 #include "gtest/gtest.h"
-#include "tools/cpp/runfiles/runfiles.h"
 
 namespace wfa_virtual_people {
 namespace {
 
-using bazel::tools::cpp::runfiles::Runfiles;
-
-// TEST(ModelApplierTest, EmptyModelInput) {}
-
-// TEST(ModelApplierTest, EmptyEventInput) {}
-
 TEST(ModelApplierTest, AllPossibleToyModelBranches) {
-    std::string error;
-    std::unique_ptr<Runfiles> runfiles(Runfiles::CreateForTest(&error));
+    std::string cmpEvents = std::system("cmp ./textproto/expected/output_events.txt output_events.txt");
+    std::string cmpReports = std::system("cmp ./textproto/expected/output_reports.txt output_reports.txt");
 
-    std::string rlocation_path = "virtual_people_examples/src/main/cc/wfa/virtual_people/model_applier/model_applier";
-    std::string path = runfiles->Rlocation(rlocation_path);
-
-    if (path.empty()) { 
-        FAIL() << "failed to lookup runfile for: " << rlocation_path << std::endl; 
-    }
-
-    std::string model_node_path="//src/test/cc/wfa/virtual_people/model_applier/textproto/toy_model.textproto";
-    std::string input_path="//src/test/cc/wfa/virtual_people/model_applier/textproto/input_events.textproto";
-    std::string output_dir=".";
-
-    std::string cmd = path + 
-        " --model_node_path=" + model_node_path + 
-        " --input_path=" + input_path + 
-        " --output_dir=" + output_dir;
-
-    std::system(cmd.c_str());
+    EXPECT_EQ(cmpEvents, NULL) << cmpEvents << std::endl;
+    EXPECT_EQ(cmpReports, NULL) << cmpReports << std::endl;
 }
 
 }   // namespace

@@ -5,10 +5,26 @@ package(default_visibility = ["//visibility:private"])
 cc_test(
     name = "model_applier_test",
     srcs = ["model_applier_test.cc"],
-    data = ["//src/main/cc/wfa/virtual_people/model_applier:model_applier"],
+    data = [":model_applier_genrule"],
     deps = [
         "//src/main/cc/wfa/virtual_people/model_applier:model_applier",
-        "@bazel_tools//tools/cpp/runfiles",
-        "@com_google_googletest//:gtest_main"
-    ]
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+genrule(
+    name = "model_applier_genrule",
+    srcs = [
+        "//src/test/cc/wfa/virtual_people/model_applier/textproto:toy_model.textproto",
+        "//src/test/cc/wfa/virtual_people/model_applier/textproto:input_events.textproto",
+    ],
+    outs = [
+        "output_events.txt",
+        "output_reports.txt"
+    ],
+    cmd = "$(location //src/main/cc/wfa/virtual_people/model_applier:model_applier)" + 
+        "--model_node_path $(location //src/test/cc/wfa/virtual_people/model_applier/textproto:toy_model.textproto)" + 
+        "--input_path $(location //src/test/cc/wfa/virtual_people/model_applier/textproto:input_events.textproto)" +
+        "--output_path $(RULEDIR)",
+    exec_tools = ["//src/main/cc/wfa/virtual_people/model_applier:model_applier"],
 )
