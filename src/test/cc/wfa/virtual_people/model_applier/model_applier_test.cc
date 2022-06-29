@@ -12,24 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
+#include <cstdlib>
+#include <fcntl.h>
 #include <string>
-#include <array>
 
+#include "glog/logging.h"
 #include "gtest/gtest.h"
+#include "google/protobuf/text_format.h"
+#include "google/protobuf/io/zero_copy_stream_impl.h"
+#include "google/protobuf/util/message_differencer.h"
+
+using namespace ::google::protobuf;
+using namespace ::google::protobuf::io;
+using namespace ::google::protobuf::util;
 
 namespace wfa_virtual_people {
 namespace {
 
-TEST(ModelApplierTest, AllPossibleToyModelBranches) {
-    std::string cmpEvents = std::system("cmp ./textproto/expected/output_events.txt output_events.txt");
-    std::string cmpReports = std::system("cmp ./textproto/expected/output_reports.txt output_reports.txt");
+void ReadTextProtoFile(std::string path, Message* message) {
+    CHECK(!path.empty()) << "No path set";
+    int fd = open(path.c_str(), O_RDONLY);
+    CHECK(fd > 0) << "Unable to open file: " << path;
+    FileInputStream fstream(fd);
+    CHECK(TextFormat::Parse(&fstream, message)) 
+        << "Unable to parse textproto file: " << path;
+}
 
-    EXPECT_EQ(cmpEvents, NULL) << cmpEvents << std::endl;
-    EXPECT_EQ(cmpReports, NULL) << cmpReports << std::endl;
+TEST(ModelApplierTest, AllPossibleToyModelBranches) {
+    std::string eventsExpectedPath = "//src/test/cc/wfa/virtual_people/model_applier/textproto/expected/output_events.txt";
+    std::string eventsOutputPath = "//bazel-out/k8-fastbuild/bin/src/test/cc/wfa/virtual_people/model_applier/output_events.txt";
+
+    std::string reportsExpectedPath = "//src/test/cc/wfa/virtual_people/model_applier/textproto/expected/output_reports.txt";
+    std::string reportsOutputPath = "//bazel-out/k8-fastbuild/bin/src/test/cc/wfa/virtual_people/model_applier/output_reports.txt";
+    
+    Message* eventsExpected = nullptr;
+    ReadTextProtoFile(eventsExpectedPath, eventsExpected);
+
+    // Message* eventsOutput = nullptr;
+    // ReadTextProtoFile(eventsOutputPath, eventsOutput);
+
+    // Message* reportsExpected = nullptr;
+    // ReadTextProtoFile(reportsExpectedPath, reportsExpected);
+
+    // Message* reportsOutput = nullptr;
+    // ReadTextProtoFile(reportsOutputPath, reportsOutput);
+
+    // MessageDifferencer diff;
+    // EXPECT_TRUE(diff.Equals(*eventsExpected, *eventsOutput));
+    // EXPECT_TRUE(diff.Equals(*reportsExpected, *reportsOutput));
 }
 
 }   // namespace

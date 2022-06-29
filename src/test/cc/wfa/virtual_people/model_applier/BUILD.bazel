@@ -5,10 +5,16 @@ package(default_visibility = ["//visibility:private"])
 cc_test(
     name = "model_applier_test",
     srcs = ["model_applier_test.cc"],
-    data = [":model_applier_genrule"],
+    data = [
+        ":model_applier_genrule",
+        "//src/test/cc/wfa/virtual_people/model_applier/textproto/expected:output_events.txt",
+        "//src/test/cc/wfa/virtual_people/model_applier/textproto/expected:output_reports.txt",
+    ],
     deps = [
         "//src/main/cc/wfa/virtual_people/model_applier:model_applier",
+        "@com_github_google_glog//:glog",
         "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf", 
     ],
 )
 
@@ -22,9 +28,9 @@ genrule(
         "output_events.txt",
         "output_reports.txt"
     ],
-    cmd = "$(location //src/main/cc/wfa/virtual_people/model_applier:model_applier)" + 
-        "--model_node_path $(location //src/test/cc/wfa/virtual_people/model_applier/textproto:toy_model.textproto)" + 
-        "--input_path $(location //src/test/cc/wfa/virtual_people/model_applier/textproto:input_events.textproto)" +
-        "--output_path $(RULEDIR)",
+    cmd = "$(location //src/main/cc/wfa/virtual_people/model_applier:model_applier) " + 
+        "--model_node_path $(location //src/test/cc/wfa/virtual_people/model_applier/textproto:toy_model.textproto) " + 
+        "--input_path $(location //src/test/cc/wfa/virtual_people/model_applier/textproto:input_events.textproto) " +
+        "--output_dir $(RULEDIR)",
     exec_tools = ["//src/main/cc/wfa/virtual_people/model_applier:model_applier"],
 )
