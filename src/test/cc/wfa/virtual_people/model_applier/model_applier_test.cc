@@ -39,11 +39,11 @@ void ReadTextProtoFile(std::string path, Message* message) {
 }
 
 TEST(ModelApplierTest, AllPossibleToyModelBranches) {
-    std::string eventsExpectedPath = "//src/test/cc/wfa/virtual_people/model_applier/textproto/expected/output_events.txt";
-    std::string eventsOutputPath = "//bazel-out/k8-fastbuild/bin/src/test/cc/wfa/virtual_people/model_applier/output_events.txt";
+    std::string eventsExpectedPath = "src/test/cc/wfa/virtual_people/model_applier/textproto/expected/output_events.txt";
+    // std::string eventsOutputPath = "bazel-out/k8-fastbuild/bin/src/test/cc/wfa/virtual_people/model_applier/output_events.txt";
 
-    std::string reportsExpectedPath = "//src/test/cc/wfa/virtual_people/model_applier/textproto/expected/output_reports.txt";
-    std::string reportsOutputPath = "//bazel-out/k8-fastbuild/bin/src/test/cc/wfa/virtual_people/model_applier/output_reports.txt";
+    // std::string reportsExpectedPath = "src/test/cc/wfa/virtual_people/model_applier/textproto/expected/output_reports.txt";
+    // std::string reportsOutputPath = "bazel-out/k8-fastbuild/bin/src/test/cc/wfa/virtual_people/model_applier/output_reports.txt";
     
     Message* eventsExpected = nullptr;
     ReadTextProtoFile(eventsExpectedPath, eventsExpected);
