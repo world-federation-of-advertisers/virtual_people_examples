@@ -27,9 +27,40 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out revision
-        uses: actions/checkout@v2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Bazel build and test
-        uses: world-federation-of-advertisers/actions/bazel-build-test@v1
+      - name: Set up Bazel
+        uses: world-federation-of-advertisers/actions/setup-bazel@v2
+
+      - name: Get Bazel cache parameters
+        id: get-cache-params
+        uses: world-federation-of-advertisers/actions/bazel-get-cache-params@v2
         with:
-          workspace-path: .
+          cache-version: 1
+
+      - name: Restore Bazel cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.get-cache-params.outputs.cache-path }}
+          key: ${{ steps.get-cache-params.outputs.cache-key }}
+          restore-keys: |-
+            ${{ steps.get-cache-params.outputs.restore-key }}
+
+      - name: Build
+        run: bazel build --lockfile_mode=error //...
+
+      - name: Run tests
+        id: run-tests
+        run: bazel test --lockfile_mode=error //...
+
+      - name: Save Bazel cache
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        continue-on-error: true
+        with:
+          path: ${{ steps.get-cache-params.outputs.cache-path }}
+          key: ${{ steps.get-cache-params.outputs.cache-key }}
+
+      - name: Upload Bazel test logs
+        if: failure() && (steps.run-tests.outcome == 'failure')
+        continue-on-error: true
+        uses: world-federation-of-advertisers/actions/bazel-upload-testlogs@v2
