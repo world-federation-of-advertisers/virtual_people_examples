@@ -1,3 +1,8 @@
+# Enable Bzlmod with WFA registry.
+common --enable_bzlmod
+common --registry=https://raw.githubusercontent.com/world-federation-of-advertisers/bazel-registry/main
+common --registry=https://bcr.bazel.build
+
 # Use clang as C++ compiler.
 build --repo_env='CC=clang'
 
